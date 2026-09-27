@@ -2,31 +2,87 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Contract Repository Tracker</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contract Repository Management Dashboard</title>
+    <!-- Tailwind CSS for modern styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- PapaParse to read CSV -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 30px; background-color: #f8f9fa; }
-        h1 { color: #333; }
-        input { padding: 10px; width: 100%; max-width: 400px; margin-bottom: 20px; font-size: 16px; border: 1px solid #ccc; border-radius: 4px; }
-        table { border-collapse: collapse; width: 100%; background: white; border-radius: 6px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
-        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
-        th { background-color: #0366d6; color: white; }
-        tr:nth-child(even) { background-color: #f2f2f2; }
-    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
-<body>
+<body class="bg-slate-100 font-sans text-slate-800">
 
-    <h1>Contract Repository Tracker</h1>
-    <input type="text" id="searchInput" onkeyup="searchTable()" placeholder="Search contracts by keyword...">
+    <!-- Top Navigation Bar -->
+    <header class="bg-slate-900 text-white shadow-md">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-xl font-bold flex items-center gap-2">
+                <i class="fa-solid fa-file-contract text-blue-400"></i> Contract Repository Management Tool
+            </h1>
+            <div class="flex gap-3">
+                <a id="sheetLink" href="#" target="_blank" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition flex items-center gap-2">
+                    <i class="fa-solid fa-plus"></i> Add New Contract
+                </a>
+            </div>
+        </div>
+    </header>
 
-    <table id="contractTable">
-        <thead><tr id="tableHeader"></tr></thead>
-        <tbody id="tableBody"></tbody>
-    </table>
+    <main class="max-w-7xl mx-auto px-6 py-8">
+
+        <!-- Executive Summary Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200">
+                <p class="text-xs font-semibold text-slate-400 uppercase">Total Contracts</p>
+                <h3 id="statTotal" class="text-2xl font-bold text-slate-800 mt-1">0</h3>
+            </div>
+            <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200">
+                <p class="text-xs font-semibold text-emerald-500 uppercase">Active Contracts</p>
+                <h3 id="statActive" class="text-2xl font-bold text-emerald-600 mt-1">0</h3>
+            </div>
+            <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200">
+                <p class="text-xs font-semibold text-blue-500 uppercase">Total Monthly Rent</p>
+                <h3 id="statRent" class="text-2xl font-bold text-blue-600 mt-1">₹0</h3>
+            </div>
+            <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200">
+                <p class="text-xs font-semibold text-indigo-500 uppercase">Total Security Deposit</p>
+                <h3 id="statDeposit" class="text-2xl font-bold text-indigo-600 mt-1">₹0</h3>
+            </div>
+        </div>
+
+        <!-- Controls & Search -->
+        <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 mb-6 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="relative w-full md:w-96">
+                <i class="fa-solid fa-magnifying-glass absolute left-3 top-3.5 text-slate-400"></i>
+                <input type="text" id="searchInput" onkeyup="searchTable()" placeholder="Search by centre, state, status..." 
+                    class="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
+            </div>
+            <div class="text-sm text-slate-500">
+                Data refreshed live from Google Sheets
+            </div>
+        </div>
+
+        <!-- Interactive Data Table -->
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm text-slate-600">
+                    <thead class="bg-slate-800 text-white uppercase text-xs">
+                        <tr id="tableHeader"></tr>
+                    </thead>
+                    <tbody id="tableBody" class="divide-y divide-slate-200"></tbody>
+                </table>
+            </div>
+        </div>
+
+    </main>
 
     <script>
-        // Replace the link below with your published Google Sheet CSV link
+        // CONFIGURATION:
+        // 1. Paste your published CSV URL here:
         const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQrGOHferuZiUdl8PjvDaPQhC7QBf2JFKFqdML0W2jyUARs-iTIR6s86NO_pGvO5tkyDIAYP8HG380M/pub?output=csv';
+        
+        // 2. Paste your Google Sheet edit URL here (so users can click "Add New Contract"):
+        const googleSheetEditUrl = 'https://docs.google.com/spreadsheets/d/1T3Ii9xroZzCT_ieaAYI3D4qI_TsD8GLfmLPsyqAi4BE/edit?gid=0#gid=0';
+
+        document.getElementById('sheetLink').href = googleSheetEditUrl;
 
         fetch(csvUrl)
             .then(response => response.text())
@@ -35,25 +91,69 @@
                     header: true,
                     skipEmptyLines: true,
                     complete: function(results) {
-                        displayData(results.data);
+                        renderDashboard(results.data);
                     }
                 });
             });
 
-        function displayData(data) {
+        function renderDashboard(data) {
             if (!data || data.length === 0) return;
-            
+
+            // Compute Summary Metrics
+            let totalCount = data.length;
+            let activeCount = 0;
+            let totalRent = 0;
+            let totalDeposit = 0;
+
+            data.forEach(row => {
+                if (row['Status'] && row['Status'].trim().toLowerCase() === 'active') {
+                    activeCount++;
+                }
+                
+                // Calculate numbers while stripping commas or extra symbols
+                let rent = parseFloat((row['Monthly Rent Amount (in Rs.)'] || '0').replace(/,/g, '')) || 0;
+                let deposit = parseFloat((row['Security Deposit Amount (in Rs.)'] || '0').replace(/,/g, '')) || 0;
+                
+                totalRent += rent;
+                totalDeposit += deposit;
+            });
+
+            // Update Cards
+            document.getElementById('statTotal').innerText = totalCount;
+            document.getElementById('statActive').innerText = activeCount;
+            document.getElementById('statRent').innerText = '₹' + totalRent.toLocaleString('en-IN');
+            document.getElementById('statDeposit').innerText = '₹' + totalDeposit.toLocaleString('en-IN');
+
+            // Render Table Header
             const headers = Object.keys(data[0]);
             const headerRow = document.getElementById('tableHeader');
             headers.forEach(header => {
-                headerRow.innerHTML += `<th>${header}</th>`;
+                headerRow.innerHTML += `<th class="px-4 py-3 font-semibold">${header}</th>`;
             });
 
+            // Render Table Body
             const body = document.getElementById('tableBody');
             data.forEach(row => {
-                let tr = '<tr>';
+                let tr = '<tr class="hover:bg-slate-50 transition">';
                 headers.forEach(header => {
-                    tr += `<td>${row[header] || ''}</td>`;
+                    let cellValue = row[header] || '';
+                    
+                    // Format links automatically (like Google Drive contract links)
+                    if (cellValue.startsWith('http://') || cellValue.startsWith('https://')) {
+                        tr += `<td class="px-4 py-3">
+                            <a href="${cellValue}" target="_blank" class="inline-flex items-center gap-1 bg-blue-50 text-blue-600 px-3 py-1 rounded-md hover:bg-blue-100 font-medium text-xs">
+                                <i class="fa-solid fa-arrow-up-right-from-square"></i> Open Link
+                            </a>
+                        </td>`;
+                    } 
+                    // Format Active/Inactive status with color badges
+                    else if (header.toLowerCase() === 'status') {
+                        let badgeClass = cellValue.toLowerCase() === 'active' ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-100 text-slate-600';
+                        tr += `<td class="px-4 py-3"><span class="px-2.5 py-1 rounded-full text-xs font-semibold ${badgeClass}">${cellValue}</span></td>`;
+                    } 
+                    else {
+                        tr += `<td class="px-4 py-3 whitespace-nowrap">${cellValue}</td>`;
+                    }
                 });
                 tr += '</tr>';
                 body.innerHTML += tr;
@@ -69,6 +169,5 @@
             }
         }
     </script>
-
 </body>
 </html>
