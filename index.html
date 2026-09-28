@@ -308,8 +308,8 @@
         // =========================================================================
         // GOOGLE SHEETS CONFIGURATION
         // =========================================================================
-        const GOOGLE_SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQrGOHferuZiUdl8PjvDaPQhC7QBf2JFKFqdML0W2jyUARs-iTIR6s86NO_pGvO5tkyDIAYP8HG380M/pub?output=csv'; 
-        const GOOGLE_SHEET_EDIT_URL = 'https://docs.google.com/spreadsheets/d/1T3Ii9xroZzCT_ieaAYI3D4qI_TsD8GLfmLPsyqAi4BE/edit?gid=0#gid=0'; 
+        const GOOGLE_SHEET_CSV_URL = 'YOUR_GOOGLE_SHEET_CSV_URL_HERE'; 
+        const GOOGLE_SHEET_EDIT_URL = 'YOUR_EDITABLE_GOOGLE_SHEET_URL_HERE'; 
 
         const sampleContractData = [
             {
@@ -390,7 +390,6 @@
         function switchTab(tabName) {
             currentTab = tabName;
             
-            // Update active styling on tab buttons
             document.querySelectorAll('.repo-tab').forEach(btn => {
                 btn.className = "repo-tab px-4 py-2 rounded-lg transition-all flex items-center gap-2 text-corporate-300 hover:text-white hover:bg-corporate-800";
             });
@@ -416,21 +415,45 @@
         function getColumnValue(row, possibleNames) {
             if (!row) return null;
             const keys = Object.keys(row);
+            
+            // Normalize string helper: lowercase and strip spaces/special chars
+            const normalize = (str) => str ? str.toString().toLowerCase().replace(/[^a-z0-9]/g, '') : '';
+
+            // Pass 1: Exact normalized string match
             for (let name of possibleNames) {
-                const target = name.trim().toLowerCase();
+                const normTarget = normalize(name);
                 for (let key of keys) {
-                    if (key.trim().toLowerCase() === target) {
-                        return row[key];
+                    if (normalize(key) === normTarget) {
+                        const val = row[key];
+                        if (val !== undefined && val !== null && val.toString().trim() !== '') {
+                            return val.toString().trim();
+                        }
                     }
                 }
             }
+
+            // Pass 2: Partial/substring normalized match for dynamic Google Sheet column variations
+            for (let name of possibleNames) {
+                const normTarget = normalize(name);
+                if (normTarget.length < 3) continue;
+                for (let key of keys) {
+                    const normKey = normalize(key);
+                    if (normKey.includes(normTarget) || normTarget.includes(normKey)) {
+                        const val = row[key];
+                        if (val !== undefined && val !== null && val.toString().trim() !== '') {
+                            return val.toString().trim();
+                        }
+                    }
+                }
+            }
+
             return null;
         }
 
         function findUrlColumn(row) {
             let explicit = getColumnValue(row, [
                 'Latest Rent Agreement', 'Rent Agreement', 'Agreement Link', 
-                'Rent Agreement Link', 'Expiry Alert', 'Link', 'Document Link', 'URL'
+                'Rent Agreement Link', 'Expiry Alert', 'Link', 'Document Link', 'URL', 'PDF Link', 'Agreement'
             ]);
             if (explicit && explicit.toString().trim().startsWith('http')) {
                 return explicit.trim();
@@ -516,11 +539,10 @@
         function renderDashboard(data) {
             if (!data || data.length === 0) return;
 
-            // Filter data based on active tab
             let filteredData = data;
             if (currentTab !== 'All') {
                 filteredData = data.filter(row => {
-                    let repoType = (getColumnValue(row, ['Type', 'Category', 'Property Type', 'Repository Type', 'Facility Type', 'Office', 'Dealership']) || 'Centre').toString().trim().toLowerCase();
+                    let repoType = (getColumnValue(row, ['Type', 'Category', 'Property Type', 'Repository Type', 'Facility Type', 'Office', 'Dealership', 'Facility']) || 'Centre').toString().trim().toLowerCase();
                     return repoType.includes(currentTab.toLowerCase());
                 });
             }
@@ -545,25 +567,41 @@
             }
 
             filteredData.forEach((row, index) => {
-                let state = getColumnValue(row, ['State', 'STATE', 'State Name']) || '-';
-                let entityName = getColumnValue(row, ['Entity Name', 'ENTITY NAME', 'Entity', 'Legal Entity', 'Company', 'Company Name']) || '-';
-                let centreName = getColumnValue(row, ['Centre Name', 'CENTRE NAME', 'Centre', 'Center Name', 'Center', 'Office', 'Dealership']) || '-';
-                let status = (getColumnValue(row, ['Status', 'STATUS']) || 'Active').toString().trim();
+                let state = getColumnValue(row, ['State', 'STATE', 'State Name', 'State Code', 'Region', 'State/UT']) || '-';
+                
+                let entityName = getColumnValue(row, [
+                    'Entity Name', 'ENTITY NAME', 'Entity', 'Legal Entity', 
+                    'Company Name', 'Company', 'Lessee', 'Lessor', 'Tenant', 
+                    'Firm Name', 'Organization', 'Name of Entity', 'Legal Entity Name', 
+                    'Entity Name (Lessee)', 'Entity / Company', 'Party Name'
+                ]) || '-';
+
+                let centreName = getColumnValue(row, [
+                    'Centre Name', 'CENTRE NAME', 'Centre', 'Center Name', 'Center', 
+                    'Office', 'Dealership', 'Facility Name', 'Facility', 'Property Name', 
+                    'Site Name', 'Location Name', 'Location'
+                ]) || '-';
+
+                let status = (getColumnValue(row, ['Status', 'STATUS', 'Agreement Status', 'Contract Status']) || 'Active').toString().trim();
                 let agreementLink = findUrlColumn(row);
 
                 let startDate = getColumnValue(row, [
                     'Start Date', 'Agreement Start Date', 'Commencement Date', 
-                    'Effective Date', 'Rent Start Date', 'Start'
+                    'Effective Date', 'Rent Start Date', 'Start', 'Lease Start Date', 
+                    'From Date', 'Date of Commencement'
                 ]) || '-';
 
                 let expiryDate = getColumnValue(row, [
                     'Expiry Date', 'Agreement Expiry Date', 'End Date', 
-                    'Expiration Date', 'Termination Date', 'Expiry', 'End'
+                    'Expiration Date', 'Termination Date', 'Expiry', 'End', 
+                    'Lease Expiry Date', 'Rent Expiry Date', 'Valid Till', 'Valid Until', 
+                    'Valid Upto', 'Agreement End Date', 'Date of Expiry', 'Till Date', 
+                    'To Date', 'Agreement Expiry', 'Lease End Date'
                 ]) || '-';
 
                 if (status.toLowerCase() === 'active') {
                     activeCentres++;
-                } else if (['closed', 'inactive', 'terminated'].includes(status.toLowerCase())) {
+                } else if (['closed', 'inactive', 'terminated', 'expired'].includes(status.toLowerCase())) {
                     closedCentres++;
                 }
 
@@ -625,22 +663,38 @@
             let row = contractData[index];
             if (!row) return;
 
-            let state = getColumnValue(row, ['State', 'STATE', 'State Name']) || 'N/A';
-            let entityName = getColumnValue(row, ['Entity Name', 'ENTITY NAME', 'Entity', 'Legal Entity', 'Company', 'Company Name']) || 'N/A';
-            let centreName = getColumnValue(row, ['Centre Name', 'CENTRE NAME', 'Centre', 'Center Name', 'Center']) || 'Centre Contract';
-            let status = (getColumnValue(row, ['Status', 'STATUS']) || 'Active').toString().trim();
+            let state = getColumnValue(row, ['State', 'STATE', 'State Name', 'State Code', 'Region', 'State/UT']) || 'N/A';
+            
+            let entityName = getColumnValue(row, [
+                'Entity Name', 'ENTITY NAME', 'Entity', 'Legal Entity', 
+                'Company Name', 'Company', 'Lessee', 'Lessor', 'Tenant', 
+                'Firm Name', 'Organization', 'Name of Entity', 'Legal Entity Name', 
+                'Entity Name (Lessee)', 'Entity / Company', 'Party Name'
+            ]) || 'N/A';
+
+            let centreName = getColumnValue(row, [
+                'Centre Name', 'CENTRE NAME', 'Centre', 'Center Name', 'Center', 
+                'Office', 'Dealership', 'Facility Name', 'Facility', 'Property Name', 
+                'Site Name', 'Location Name', 'Location'
+            ]) || 'Centre Contract';
+
+            let status = (getColumnValue(row, ['Status', 'STATUS', 'Agreement Status', 'Contract Status']) || 'Active').toString().trim();
             let rent = getColumnValue(row, ['Monthly Rent Amount (in Rs.)', 'Monthly Rent Amount', 'Monthly Rent', 'Rent']) || 'N/A';
             let deposit = getColumnValue(row, ['Security Deposit Amount (in Rs.)', 'Security Deposit Amount', 'Security Deposit', 'Deposit']) || 'N/A';
             let term = getColumnValue(row, ['Term', 'Tenure', 'Agreement Term', 'Duration']) || 'N/A';
 
             let startDate = getColumnValue(row, [
                 'Start Date', 'Agreement Start Date', 'Commencement Date', 
-                'Effective Date', 'Rent Start Date', 'Start'
+                'Effective Date', 'Rent Start Date', 'Start', 'Lease Start Date', 
+                'From Date', 'Date of Commencement'
             ]) || 'N/A';
 
             let expiryDate = getColumnValue(row, [
                 'Expiry Date', 'Agreement Expiry Date', 'End Date', 
-                'Expiration Date', 'Termination Date', 'Expiry', 'End'
+                'Expiration Date', 'Termination Date', 'Expiry', 'End', 
+                'Lease Expiry Date', 'Rent Expiry Date', 'Valid Till', 'Valid Until', 
+                'Valid Upto', 'Agreement End Date', 'Date of Expiry', 'Till Date', 
+                'To Date', 'Agreement Expiry', 'Lease End Date'
             ]) || 'N/A';
 
             let agreementLink = findUrlColumn(row) || '#';
