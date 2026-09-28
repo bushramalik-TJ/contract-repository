@@ -4,21 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contract Repository Management Dashboard</title>
-    <!-- Tailwind CSS for modern web UI -->
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- PapaParse to read published Google Sheet CSV -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Freeze table header sticky behavior */
+        /* Frozen Sticky Table Header */
         .sticky-header th {
             position: sticky;
             top: 0;
             z-index: 10;
-            background-color: #1e293b; /* slate-800 */
+            background-color: #0f172a; /* Deep Slate Navy */
         }
-        /* Custom scrollbar for table container */
         .table-container::-webkit-scrollbar {
             height: 8px;
             width: 8px;
@@ -29,23 +28,23 @@
         }
     </style>
 </head>
-<body class="bg-slate-100 font-sans text-slate-800 antialiased min-h-screen flex flex-col">
+<body class="bg-slate-100/70 font-sans text-slate-800 antialiased min-h-screen flex flex-col">
 
-    <!-- Top Navigation Bar -->
-    <header class="bg-slate-900 text-white shadow-lg sticky top-0 z-20">
+    <!-- Top Executive Dark Header (Slate Navy & Amber Accent) -->
+    <header class="bg-slate-900 text-white shadow-lg sticky top-0 z-20 border-b border-amber-600/30">
         <div class="max-w-7xl mx-auto px-6 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
-            <div class="flex items-center gap-3">
-                <div class="p-2 bg-blue-600 rounded-lg">
-                    <i class="fa-solid fa-file-contract text-white text-xl"></i>
+            <div class="flex items-center gap-3.5">
+                <div class="p-2.5 bg-amber-500/10 border border-amber-500/30 rounded-xl">
+                    <i class="fa-solid fa-building-columns text-amber-500 text-xl"></i>
                 </div>
                 <div>
-                    <h1 class="text-xl font-bold tracking-wide">Contract Repository Management Tool</h1>
-                    <p class="text-xs text-slate-400">Real-time Real Estate Agreement Portal</p>
+                    <h1 class="text-xl font-bold tracking-wide text-white">Contract Repository Management Tool</h1>
+                    <p class="text-xs text-slate-400 font-medium">Real-time Real Estate Agreement Portal</p>
                 </div>
             </div>
             <div class="flex items-center gap-3">
-                <a id="addContractBtn" href="#" target="_blank" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2.5 rounded-lg text-sm font-semibold transition flex items-center gap-2 shadow-md">
-                    <i class="fa-solid fa-plus"></i> Add New Contract
+                <a id="addContractBtn" href="#" target="_blank" class="bg-amber-600 hover:bg-amber-700 text-white font-semibold px-4 py-2.5 rounded-xl text-sm transition shadow-md flex items-center gap-2">
+                    <i class="fa-solid fa-plus text-xs"></i> Add New Contract
                 </a>
             </div>
         </div>
@@ -53,64 +52,67 @@
 
     <main class="max-w-7xl mx-auto px-6 py-8 flex-grow w-full">
 
-        <!-- Executive Summary Cards (3 Cards) -->
+        <!-- Executive KPI Cards -->
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
-            <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 flex flex-col justify-between hover:shadow-md transition">
+            <!-- Total Centres -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200/80 flex flex-col justify-between hover:shadow-md transition">
                 <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">TOTAL CENTRES</p>
-                <div class="flex items-baseline justify-between mt-2">
-                    <h3 id="statTotalCentres" class="text-3xl font-extrabold text-slate-800">0</h3>
-                    <span class="p-2 bg-slate-100 text-slate-600 rounded-lg"><i class="fa-solid fa-building"></i></span>
+                <div class="flex items-baseline justify-between mt-3">
+                    <h3 id="statTotalCentres" class="text-3xl font-extrabold text-slate-900">0</h3>
+                    <span class="p-2.5 bg-slate-100 text-slate-600 rounded-xl"><i class="fa-solid fa-city text-base"></i></span>
                 </div>
             </div>
 
-            <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 flex flex-col justify-between hover:shadow-md transition">
-                <p class="text-xs font-bold text-emerald-500 uppercase tracking-wider">ACTIVE CENTRES</p>
-                <div class="flex items-baseline justify-between mt-2">
+            <!-- Active Centres -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-emerald-100 flex flex-col justify-between hover:shadow-md transition">
+                <p class="text-xs font-bold text-emerald-600 uppercase tracking-wider">ACTIVE CENTRES</p>
+                <div class="flex items-baseline justify-between mt-3">
                     <h3 id="statActiveCentres" class="text-3xl font-extrabold text-emerald-600">0</h3>
-                    <span class="p-2 bg-emerald-50 text-emerald-600 rounded-lg"><i class="fa-solid fa-circle-check"></i></span>
+                    <span class="p-2.5 bg-emerald-50 text-emerald-600 rounded-xl"><i class="fa-solid fa-circle-check text-base"></i></span>
                 </div>
             </div>
 
-            <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 flex flex-col justify-between hover:shadow-md transition">
+            <!-- Total Closed Centres -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-rose-100 flex flex-col justify-between hover:shadow-md transition">
                 <p class="text-xs font-bold text-rose-500 uppercase tracking-wider">TOTAL CLOSED CENTRES</p>
-                <div class="flex items-baseline justify-between mt-2">
+                <div class="flex items-baseline justify-between mt-3">
                     <h3 id="statClosedCentres" class="text-3xl font-extrabold text-rose-600">0</h3>
-                    <span class="p-2 bg-rose-50 text-rose-600 rounded-lg"><i class="fa-solid fa-rectangle-xmark"></i></span>
+                    <span class="p-2.5 bg-rose-50 text-rose-600 rounded-xl"><i class="fa-solid fa-rectangle-xmark text-base"></i></span>
                 </div>
             </div>
         </div>
 
-        <!-- Search Bar and Status Indicator -->
-        <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 mb-6 flex flex-col sm:flex-row justify-between items-center gap-4">
+        <!-- Search Bar & Refresh Badge -->
+        <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200/80 mb-6 flex flex-col sm:flex-row justify-between items-center gap-4">
             <div class="relative w-full sm:w-96">
                 <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3.5 text-slate-400"></i>
                 <input type="text" id="searchInput" onkeyup="filterTable()" placeholder="Search by centre name, state, status..." 
-                    class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm font-medium transition">
+                    class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500/50 text-sm font-medium transition">
             </div>
-            <div class="flex items-center gap-2 text-xs font-semibold text-emerald-600 bg-emerald-50 px-3 py-1.5 rounded-full">
+            <div class="flex items-center gap-2 text-xs font-semibold text-emerald-700 bg-emerald-50 border border-emerald-100 px-3.5 py-2 rounded-full">
                 <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
                 <span>Data refreshed live from Google Sheets</span>
             </div>
         </div>
 
-        <!-- Table Container with Frozen Headers -->
-        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+        <!-- Main Data Table Container -->
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200/80 overflow-hidden">
             <div class="table-container max-h-[600px] overflow-y-auto overflow-x-auto">
-                <table class="w-full text-left text-sm text-slate-600">
+                <table class="w-full text-left text-sm text-slate-700">
                     <thead>
-                        <tr class="sticky-header text-xs text-white uppercase font-semibold">
-                            <th class="px-5 py-4">State</th>
-                            <th class="px-5 py-4">Centre Name</th>
-                            <th class="px-5 py-4">Status</th>
-                            <th class="px-5 py-4">Latest Rent Agreement</th>
-                            <th class="px-5 py-4 text-center">Summary</th>
+                        <tr class="sticky-header text-xs text-amber-400 uppercase font-bold tracking-wider">
+                            <th class="px-6 py-4">State</th>
+                            <th class="px-6 py-4">Centre Name</th>
+                            <th class="px-6 py-4">Status</th>
+                            <th class="px-6 py-4">Latest Rent Agreement</th>
+                            <th class="px-6 py-4 text-center">Summary</th>
                         </tr>
                     </thead>
                     <tbody id="tableBody" class="divide-y divide-slate-100">
                         <tr>
                             <td colspan="5" class="text-center py-12 text-slate-400">
-                                <i class="fa-solid fa-circle-notch fa-spin text-2xl mb-2 text-blue-500"></i>
-                                <p>Loading contract details...</p>
+                                <i class="fa-solid fa-circle-notch fa-spin text-2xl mb-2 text-amber-600"></i>
+                                <p class="text-sm font-medium">Fetching contract details from Google Sheets...</p>
                             </td>
                         </tr>
                     </tbody>
@@ -120,12 +122,12 @@
 
     </main>
 
-    <!-- Executive Contract Summary Modal -->
+    <!-- Executive Summary Modal -->
     <div id="summaryModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center p-4 z-50 transition-opacity">
-        <div class="bg-white rounded-2xl shadow-2xl max-w-xl w-full overflow-hidden transform transition-all">
-            <div class="bg-slate-900 px-6 py-4 flex justify-between items-center text-white">
-                <h3 class="font-bold text-base flex items-center gap-2">
-                    <i class="fa-solid fa-file-signature text-amber-400"></i> Contract Executive Summary
+        <div class="bg-white rounded-2xl shadow-2xl max-w-xl w-full overflow-hidden border border-slate-200">
+            <div class="bg-slate-900 px-6 py-4 flex justify-between items-center text-white border-b border-amber-600/30">
+                <h3 class="font-bold text-base flex items-center gap-2 text-amber-400">
+                    <i class="fa-solid fa-file-signature text-amber-500"></i> Executive Contract Summary
                 </h3>
                 <button onclick="closeModal()" class="text-slate-400 hover:text-white transition">
                     <i class="fa-solid fa-xmark text-lg"></i>
@@ -135,58 +137,56 @@
             <div class="p-6 space-y-4 text-slate-700 max-h-[80vh] overflow-y-auto">
                 <div class="border-b border-slate-100 pb-3 flex justify-between items-start">
                     <div>
-                        <p class="text-xs font-bold text-slate-400 uppercase">Centre Details</p>
-                        <h4 id="modalCentreName" class="text-lg font-bold text-slate-800">--</h4>
-                        <p id="modalState" class="text-xs text-slate-500 mt-0.5">--</p>
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Centre Details</p>
+                        <h4 id="modalCentreName" class="text-lg font-bold text-slate-900">--</h4>
+                        <p id="modalState" class="text-xs font-semibold text-slate-500 mt-0.5">--</p>
                     </div>
                     <span id="modalStatusBadge" class="px-3 py-1 rounded-full text-xs font-bold border">--</span>
                 </div>
                 
-                <!-- Financial & Term Breakdown -->
                 <div class="grid grid-cols-3 gap-3 bg-slate-50 p-3.5 rounded-xl border border-slate-100 text-xs">
                     <div>
-                        <span class="text-slate-400 font-semibold block uppercase text-[10px]">Term / Tenure</span>
+                        <span class="text-slate-400 font-bold block uppercase text-[10px]">Term / Tenure</span>
                         <span id="modalTerm" class="font-bold text-slate-800 text-sm">--</span>
                     </div>
                     <div>
-                        <span class="text-slate-400 font-semibold block uppercase text-[10px]">Monthly Rent</span>
-                        <span id="modalRent" class="font-bold text-blue-600 text-sm">--</span>
+                        <span class="text-slate-400 font-bold block uppercase text-[10px]">Monthly Rent</span>
+                        <span id="modalRent" class="font-bold text-amber-700 text-sm">--</span>
                     </div>
                     <div>
-                        <span class="text-slate-400 font-semibold block uppercase text-[10px]">Security Deposit</span>
-                        <span id="modalDeposit" class="font-bold text-indigo-600 text-sm">--</span>
+                        <span class="text-slate-400 font-bold block uppercase text-[10px]">Security Deposit</span>
+                        <span id="modalDeposit" class="font-bold text-slate-800 text-sm">--</span>
                     </div>
                 </div>
 
-                <!-- Material Legal Clauses & Details -->
                 <div class="space-y-3">
-                    <div class="bg-amber-50/60 border border-amber-200/70 p-3.5 rounded-xl">
-                        <p class="text-xs font-bold text-amber-800 uppercase mb-1 flex items-center gap-1.5">
+                    <div class="bg-amber-50/70 border border-amber-200/80 p-3.5 rounded-xl">
+                        <p class="text-xs font-bold text-amber-900 uppercase mb-1 flex items-center gap-1.5">
                             <i class="fa-solid fa-shield-halved text-amber-600"></i> Indemnity Clause Summary
                         </p>
-                        <p id="modalIndemnity" class="text-xs text-amber-950 leading-relaxed">
+                        <p id="modalIndemnity" class="text-xs text-amber-950 leading-relaxed font-medium">
                             Standard Lessee/Lessor indemnity holds harmless against property title disputes, third-party liability, and operational non-compliance during occupancy.
                         </p>
                     </div>
 
                     <div class="bg-slate-50 border border-slate-200 p-3.5 rounded-xl">
-                        <p class="text-xs font-bold text-slate-700 uppercase mb-1 flex items-center gap-1.5">
-                            <i class="fa-solid fa-scale-balanced text-slate-600"></i> Material Legal Clauses & Covenants
+                        <p class="text-xs font-bold text-slate-800 uppercase mb-1 flex items-center gap-1.5">
+                            <i class="fa-solid fa-scale-balanced text-slate-700"></i> Material Legal Clauses & Covenants
                         </p>
                         <ul id="modalMaterialClauses" class="text-xs text-slate-600 space-y-1.5 list-disc list-inside leading-relaxed">
-                            <li><strong>Lock-in Period:</strong> Minimum 12-month lock-in requirement prior to early termination notice.</li>
-                            <li><strong>Notice Period:</strong> 3-month written notice mandatory for statutory exit.</li>
-                            <li><strong>Rent Escalation:</strong> Standard 15% escalation applied every 3 years.</li>
-                            <li><strong>Permitted Use:</strong> Exclusively designated for commercial center and workplace operations.</li>
+                            <li><strong>Lock-in Period:</strong> Minimum lock-in requirement prior to early termination notice.</li>
+                            <li><strong>Notice Period:</strong> Written notice mandatory for statutory exit.</li>
+                            <li><strong>Rent Escalation:</strong> Standard escalation clause as per agreement schedule.</li>
+                            <li><strong>Permitted Use:</strong> Exclusively designated for commercial center operations.</li>
                         </ul>
                     </div>
                 </div>
 
-                <div class="pt-2 flex justify-end gap-3 border-t border-slate-100">
-                    <a id="modalDocLink" href="#" target="_blank" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-xs font-semibold transition flex items-center gap-1.5">
+                <div class="pt-3 flex justify-end gap-3 border-t border-slate-100">
+                    <a id="modalDocLink" href="#" target="_blank" class="bg-slate-900 hover:bg-slate-800 text-amber-400 font-semibold px-4 py-2 rounded-xl text-xs transition flex items-center gap-1.5 shadow-md border border-amber-500/30">
                         <i class="fa-solid fa-external-link"></i> Open Full Document
                     </a>
-                    <button onclick="closeModal()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 px-4 py-2 rounded-xl text-xs font-semibold transition">
+                    <button onclick="closeModal()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-xl text-xs font-semibold transition">
                         Close
                     </button>
                 </div>
@@ -195,15 +195,46 @@
     </div>
 
     <script>
-        // CONFIGURATION: Replace these URLs with your published sheet & edit link
-        const csvUrl = 'YOUR_GOOGLE_SHEET_CSV_URL_HERE';
-        const googleSheetEditUrl = 'YOUR_EDITABLE_GOOGLE_SHEET_URL_HERE';
+        // CONFIGURATION: Replace with your published CSV & editable Google Sheet link
+        const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQrGOHferuZiUdl8PjvDaPQhC7QBf2JFKFqdML0W2jyUARs-iTIR6s86NO_pGvO5tkyDIAYP8HG380M/pub?output=csv';
+        const googleSheetEditUrl = 'https://docs.google.com/spreadsheets/d/1T3Ii9xroZzCT_ieaAYI3D4qI_TsD8GLfmLPsyqAi4BE/edit?gid=0#gid=0';
 
         document.getElementById('addContractBtn').href = googleSheetEditUrl;
 
         let contractData = [];
 
-        // Fetch CSV from Google Sheets
+        // Helper: Dynamically find column value regardless of case/spaces
+        function getColumnValue(row, possibleNames) {
+            const keys = Object.keys(row);
+            for (let name of possibleNames) {
+                const target = name.trim().toLowerCase();
+                for (let key of keys) {
+                    if (key.trim().toLowerCase() === target) {
+                        return row[key];
+                    }
+                }
+            }
+            return null;
+        }
+
+        // Helper: Find URL column automatically
+        function findUrlColumn(row) {
+            let explicit = getColumnValue(row, [
+                'Latest Rent Agreement', 'Rent Agreement', 'Agreement Link', 
+                'Rent Agreement Link', 'Expiry Alert', 'Link', 'Document Link', 'URL'
+            ]);
+            if (explicit && explicit.toString().trim().startsWith('http')) {
+                return explicit.trim();
+            }
+            for (let key in row) {
+                let val = (row[key] || '').toString().trim();
+                if (val.startsWith('http://') || val.startsWith('https://')) {
+                    return val;
+                }
+            }
+            return '';
+        }
+
         fetch(csvUrl)
             .then(response => response.text())
             .then(csvText => {
@@ -220,8 +251,8 @@
                 console.error('Error fetching CSV:', error);
                 document.getElementById('tableBody').innerHTML = `
                     <tr>
-                        <td colspan="5" class="text-center py-8 text-rose-500 font-medium">
-                            Failed to load Google Sheet data. Please ensure the Google Sheet is published to the web as CSV.
+                        <td colspan="5" class="text-center py-8 text-rose-600 font-medium">
+                            Failed to load Google Sheet data. Please verify your CSV link.
                         </td>
                     </tr>`;
             });
@@ -237,51 +268,46 @@
             tbody.innerHTML = '';
 
             data.forEach((row, index) => {
-                // Column Mappings
-                let state = row['State'] || row['STATE'] || '-';
-                let centreName = row['Centre Name'] || row['CENTRE NAME'] || row['Centre'] || '-';
-                let status = (row['Status'] || row['STATUS'] || 'Active').trim();
-                
-                let agreementLink = row['Latest Rent Agreement'] || row['Agreement Link'] || row['Expiry Alert'] || row['Link'] || '';
+                // Column Fetching
+                let state = getColumnValue(row, ['State', 'STATE', 'State Name']) || '-';
+                let centreName = getColumnValue(row, ['Centre Name', 'CENTRE NAME', 'Centre', 'Center Name', 'Center']) || '-';
+                let status = (getColumnValue(row, ['Status', 'STATUS']) || 'Active').toString().trim();
+                let agreementLink = findUrlColumn(row);
 
                 if (status.toLowerCase() === 'active') {
                     activeCentres++;
-                } else if (status.toLowerCase() === 'closed' || status.toLowerCase() === 'inactive' || status.toLowerCase() === 'terminated') {
+                } else if (['closed', 'inactive', 'terminated'].includes(status.toLowerCase())) {
                     closedCentres++;
                 }
 
-                // Build Table Row
+                // Row Construction
                 let tr = document.createElement('tr');
-                tr.className = "hover:bg-slate-50 transition border-b border-slate-100 text-xs sm:text-sm";
+                tr.className = "hover:bg-amber-50/20 transition border-b border-slate-100 text-xs sm:text-sm";
 
-                // State & Centre Name
-                let tdState = `<td class="px-5 py-4 font-semibold text-slate-700">${state}</td>`;
-                let tdCentre = `<td class="px-5 py-4 font-bold text-slate-900">${centreName}</td>`;
+                let tdState = `<td class="px-6 py-4 font-bold text-slate-700">${state}</td>`;
+                let tdCentre = `<td class="px-6 py-4 font-bold text-slate-900">${centreName}</td>`;
                 
-                // Status Badge
                 let badgeClass = status.toLowerCase() === 'active' 
-                    ? 'bg-emerald-100 text-emerald-800 border-emerald-200' 
-                    : 'bg-rose-100 text-rose-800 border-rose-200';
-                let tdStatus = `<td class="px-5 py-4">
+                    ? 'bg-emerald-50 text-emerald-700 border-emerald-200' 
+                    : 'bg-rose-50 text-rose-700 border-rose-200';
+                let tdStatus = `<td class="px-6 py-4">
                     <span class="px-3 py-1 rounded-full text-xs font-bold border ${badgeClass}">${status}</span>
                 </td>`;
 
-                // Latest Rent Agreement Link
                 let tdAgreement = '';
-                if (agreementLink.startsWith('http://') || agreementLink.startsWith('https://')) {
-                    tdAgreement = `<td class="px-5 py-4">
-                        <a href="${agreementLink}" target="_blank" class="inline-flex items-center gap-1.5 bg-blue-50 text-blue-600 hover:bg-blue-100 border border-blue-200 px-3 py-1.5 rounded-lg text-xs font-semibold transition">
-                            <i class="fa-solid fa-file-pdf"></i> View Agreement
+                if (agreementLink) {
+                    tdAgreement = `<td class="px-6 py-4">
+                        <a href="${agreementLink}" target="_blank" class="inline-flex items-center gap-1.5 bg-slate-100 text-slate-800 hover:bg-slate-200 border border-slate-200 px-3.5 py-1.5 rounded-lg text-xs font-bold transition">
+                            <i class="fa-solid fa-file-pdf text-rose-600"></i> View Agreement
                         </a>
                     </td>`;
                 } else {
-                    tdAgreement = `<td class="px-5 py-4 text-slate-400 italic">No Link Attached</td>`;
+                    tdAgreement = `<td class="px-6 py-4 text-slate-400 italic font-medium">No Link Attached</td>`;
                 }
 
-                // Summary Button
-                let tdSummary = `<td class="px-5 py-4 text-center">
-                    <button onclick="openSummaryModal(${index})" class="inline-flex items-center gap-1.5 bg-amber-50 text-amber-700 hover:bg-amber-100 border border-amber-200 px-3.5 py-1.5 rounded-lg text-xs font-bold transition shadow-sm">
-                        <i class="fa-solid fa-wand-magic-sparkles"></i> Summary
+                let tdSummary = `<td class="px-6 py-4 text-center">
+                    <button onclick="openSummaryModal(${index})" class="inline-flex items-center gap-1.5 bg-amber-50 text-amber-900 hover:bg-amber-100 border border-amber-300/80 px-3.5 py-1.5 rounded-lg text-xs font-bold transition shadow-sm">
+                        <i class="fa-solid fa-file-contract text-amber-600 text-xs"></i> Summary
                     </button>
                 </td>`;
 
@@ -289,13 +315,12 @@
                 tbody.appendChild(tr);
             });
 
-            // Update KPI Cards
+            // Update KPI Counters
             document.getElementById('statTotalCentres').innerText = totalCentres;
             document.getElementById('statActiveCentres').innerText = activeCentres;
             document.getElementById('statClosedCentres').innerText = closedCentres;
         }
 
-        // Filter Table
         function filterTable() {
             let filter = document.getElementById("searchInput").value.toUpperCase();
             let rows = document.getElementById("tableBody").getElementsByTagName("tr");
@@ -305,21 +330,18 @@
             }
         }
 
-        // Open Modal and display summary
         function openSummaryModal(index) {
             let row = contractData[index];
             if (!row) return;
 
-            let centreName = row['Centre Name'] || row['CENTRE NAME'] || row['Centre'] || 'Centre Contract';
-            let state = row['State'] || row['STATE'] || 'N/A';
-            let status = row['Status'] || row['STATUS'] || 'Active';
-            let rent = row['Monthly Rent Amount (in Rs.)'] || row['Monthly Rent'] || row['Rent'] || 'N/A';
-            let deposit = row['Security Deposit Amount (in Rs.)'] || row['Security Deposit'] || row['Deposit'] || 'N/A';
-            let term = row['Term'] || row['Tenure'] || row['Agreement Term'] || '11 Months';
-            let agreementLink = row['Latest Rent Agreement'] || row['Agreement Link'] || row['Expiry Alert'] || row['Link'] || '#';
-
-            // Indemnity & Clauses (extracted or fallback based on sheet columns)
-            let indemnityText = row['Indemnity Clause'] || row['Indemnity'] || `Standard Lessee indemnity protects against property title defects, third-party damages, and statutory non-compliance during the tenure of ${centreName}.`;
+            let state = getColumnValue(row, ['State', 'STATE', 'State Name']) || 'N/A';
+            let centreName = getColumnValue(row, ['Centre Name', 'CENTRE NAME', 'Centre', 'Center Name', 'Center']) || 'Centre Contract';
+            let status = (getColumnValue(row, ['Status', 'STATUS']) || 'Active').toString().trim();
+            let rent = getColumnValue(row, ['Monthly Rent Amount (in Rs.)', 'Monthly Rent Amount', 'Monthly Rent', 'Rent']) || 'N/A';
+            let deposit = getColumnValue(row, ['Security Deposit Amount (in Rs.)', 'Security Deposit Amount', 'Security Deposit', 'Deposit']) || 'N/A';
+            let term = getColumnValue(row, ['Term', 'Tenure', 'Agreement Term']) || '11 Months';
+            let agreementLink = findUrlColumn(row) || '#';
+            let indemnityText = getColumnValue(row, ['Indemnity Clause', 'Indemnity']) || `Standard Lessee indemnity protects against property title defects, third-party damages, and statutory non-compliance during occupancy at ${centreName}.`;
 
             document.getElementById('modalCentreName').innerText = centreName;
             document.getElementById('modalState').innerText = `Location: ${state} State`;
@@ -327,8 +349,8 @@
             let statusBadge = document.getElementById('modalStatusBadge');
             statusBadge.innerText = status;
             statusBadge.className = status.toLowerCase() === 'active' 
-                ? 'px-3 py-1 rounded-full text-xs font-bold border bg-emerald-100 text-emerald-800 border-emerald-200' 
-                : 'px-3 py-1 rounded-full text-xs font-bold border bg-rose-100 text-rose-800 border-rose-200';
+                ? 'px-3 py-1 rounded-full text-xs font-bold border bg-emerald-50 text-emerald-700 border-emerald-200' 
+                : 'px-3 py-1 rounded-full text-xs font-bold border bg-rose-50 text-rose-700 border-rose-200';
 
             document.getElementById('modalTerm').innerText = term;
             document.getElementById('modalRent').innerText = rent.toString().startsWith('₹') ? rent : '₹' + rent;
