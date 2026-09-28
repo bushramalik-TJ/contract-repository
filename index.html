@@ -306,10 +306,24 @@
 
     <script>
         // =========================================================================
-        // GOOGLE SHEETS CONFIGURATION
+        // GOOGLE SHEETS CONFIGURATION (MULTI-SHEET SUPPORT)
         // =========================================================================
-        const GOOGLE_SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQrGOHferuZiUdl8PjvDaPQhC7QBf2JFKFqdML0W2jyUARs-iTIR6s86NO_pGvO5tkyDIAYP8HG380M/pub?output=csv'; 
-        const GOOGLE_SHEET_EDIT_URL = 'https://docs.google.com/spreadsheets/d/1T3Ii9xroZzCT_ieaAYI3D4qI_TsD8GLfmLPsyqAi4BE/edit?gid=0#gid=0' "https://docs.google.com/spreadsheets/d/1T3Ii9xroZzCT_ieaAYI3D4qI_TsD8GLfmLPsyqAi4BE/edit?gid=307806377#gid=307806377" "https://docs.google.com/spreadsheets/d/1T3Ii9xroZzCT_ieaAYI3D4qI_TsD8GLfmLPsyqAi4BE/edit?gid=671567856#gid=671567856"; 
+        
+        // Sheet 1: Centres Repository
+        const GOOGLE_SHEET_CENTRES_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQrGOHferuZiUdl8PjvDaPQhC7QBf2JFKFqdML0W2jyUARs-iTIR6s86NO_pGvO5tkyDIAYP8HG380M/pub?output=csv'; 
+        const GOOGLE_SHEET_CENTRES_EDIT_URL = 'https://docs.google.com/spreadsheets/d/1T3Ii9xroZzCT_ieaAYI3D4qI_TsD8GLfmLPsyqAi4BE/edit?gid=0#gid=0'; 
+
+        // Sheet 2: Dealerships Repository
+        const GOOGLE_SHEET_DEALERSHIPS_CSV_URL = 'https://drive.google.com/file/d/1dAUYVqI9FxhgjC5wn8pfiFLgxXhYknCt/view?usp=drive_link'; 
+        const GOOGLE_SHEET_DEALERSHIPS_EDIT_URL = 'https://docs.google.com/spreadsheets/d/1T3Ii9xroZzCT_ieaAYI3D4qI_TsD8GLfmLPsyqAi4BE/edit?gid=307806377#gid=307806377'; 
+
+        // Sheet 3: Offices Repository
+        const GOOGLE_SHEET_OFFICES_CSV_URL = 'https://drive.google.com/file/d/1ZtLdaOUALJjy_D52IoAZwlzIfnHEzpgk/view?usp=sharing'; 
+        const GOOGLE_SHEET_OFFICES_EDIT_URL = 'https://docs.google.com/spreadsheets/d/1T3Ii9xroZzCT_ieaAYI3D4qI_TsD8GLfmLPsyqAi4BE/edit?gid=671567856#gid=671567856'; 
+
+        // Legacy / Single Combined Sheet Fallback (Optional)
+        const GOOGLE_SHEET_CSV_URL = 'YOUR_GOOGLE_SHEET_CSV_URL_HERE'; 
+        const GOOGLE_SHEET_EDIT_URL = 'YOUR_EDITABLE_GOOGLE_SHEET_URL_HERE'; 
 
         const sampleContractData = [
             {
@@ -399,7 +413,27 @@
                 activeBtn.className = "repo-tab px-4 py-2 rounded-lg transition-all flex items-center gap-2 bg-brand-600 text-white shadow-sm border border-brand-500/30 font-bold";
             }
 
+            // Update Add Contract Link based on active tab
+            updateAddContractButton();
+
             renderDashboard(contractData);
+        }
+
+        function updateAddContractButton() {
+            const addBtn = document.getElementById('addContractBtn');
+            if (!addBtn) return;
+
+            let targetEditUrl = '#';
+            if (currentTab === 'Dealership' && isValidHttpUrl(GOOGLE_SHEET_DEALERSHIPS_EDIT_URL)) {
+                targetEditUrl = GOOGLE_SHEET_DEALERSHIPS_EDIT_URL;
+            } else if (currentTab === 'Office' && isValidHttpUrl(GOOGLE_SHEET_OFFICES_EDIT_URL)) {
+                targetEditUrl = GOOGLE_SHEET_OFFICES_EDIT_URL;
+            } else if (currentTab === 'Centre' && isValidHttpUrl(GOOGLE_SHEET_CENTRES_EDIT_URL)) {
+                targetEditUrl = GOOGLE_SHEET_CENTRES_EDIT_URL;
+            } else if (isValidHttpUrl(GOOGLE_SHEET_EDIT_URL)) {
+                targetEditUrl = GOOGLE_SHEET_EDIT_URL;
+            }
+            addBtn.href = targetEditUrl;
         }
 
         function isValidHttpUrl(string) {
@@ -468,39 +502,63 @@
         }
 
         function initializeData(isManualSync = false) {
-            const addBtn = document.getElementById('addContractBtn');
+            updateAddContractButton();
             const syncIcon = document.getElementById('syncIcon');
             const syncStatusText = document.getElementById('syncStatusText');
-
-            if (isValidHttpUrl(GOOGLE_SHEET_EDIT_URL)) {
-                addBtn.href = GOOGLE_SHEET_EDIT_URL;
-            } else {
-                addBtn.href = "#";
-            }
 
             if (syncIcon) syncIcon.classList.add('fa-spin');
             if (syncStatusText) syncStatusText.innerText = "Syncing...";
 
-            if (isValidHttpUrl(GOOGLE_SHEET_CSV_URL)) {
-                fetch(GOOGLE_SHEET_CSV_URL)
-                    .then(response => {
-                        if (!response.ok) throw new Error("HTTP error " + response.status);
-                        return response.text();
-                    })
-                    .then(csvText => {
-                        Papa.parse(csvText, {
-                            header: true,
-                            skipEmptyLines: true,
-                            complete: function(results) {
-                                contractData = results.data;
-                                renderDashboard(contractData);
-                                finishSync(true, "Synced " + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
-                            }
+            // Collect all configured valid CSV URLs
+            const configuredSheets = [
+                { type: 'Centre', csvUrl: GOOGLE_SHEET_CENTRES_CSV_URL },
+                { type: 'Dealership', csvUrl: GOOGLE_SHEET_DEALERSHIPS_CSV_URL },
+                { type: 'Office', csvUrl: GOOGLE_SHEET_OFFICES_CSV_URL },
+                { type: 'General', csvUrl: GOOGLE_SHEET_CSV_URL }
+            ].filter(s => isValidHttpUrl(s.csvUrl));
+
+            if (configuredSheets.length > 0) {
+                let fetchPromises = configuredSheets.map(cfg => {
+                    return fetch(cfg.csvUrl)
+                        .then(response => {
+                            if (!response.ok) throw new Error("HTTP error " + response.status);
+                            return response.text();
+                        })
+                        .then(csvText => {
+                            return new Promise(resolve => {
+                                Papa.parse(csvText, {
+                                    header: true,
+                                    skipEmptyLines: true,
+                                    complete: function(results) {
+                                        // Auto-tag repository type if missing in the sheet
+                                        let rows = results.data.map(row => {
+                                            let existingType = getColumnValue(row, ['Type', 'Category', 'Property Type', 'Repository Type', 'Facility Type']);
+                                            if (!existingType && cfg.type !== 'General') {
+                                                row['Type'] = cfg.type;
+                                            }
+                                            return row;
+                                        });
+                                        resolve(rows);
+                                    }
+                                });
+                            });
+                        })
+                        .catch(error => {
+                            console.warn(`Fetch error for ${cfg.type} sheet:`, error);
+                            return [];
                         });
-                    })
-                    .catch(error => {
-                        console.warn('Google Sheet fetch error:', error);
-                        loadSampleData("Sync Failed (Sample Data)");
+                });
+
+                Promise.all(fetchPromises)
+                    .then(resultsArray => {
+                        let combinedData = resultsArray.flat();
+                        if (combinedData.length > 0) {
+                            contractData = combinedData;
+                            renderDashboard(contractData);
+                            finishSync(true, "Synced " + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+                        } else {
+                            loadSampleData("Sync Failed (Sample Data)");
+                        }
                     });
             } else {
                 loadSampleData(isManualSync ? "Synced (Sample Data)" : "Sync Data");
