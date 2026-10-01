@@ -85,7 +85,16 @@
                     <p class="text-xs text-corporate-400 font-medium">Real Estate Portfolio & Agreement Analytics</p>
                 </div>
             </div>
-            <div class="flex items-center gap-3">
+            
+            <div class="flex items-center gap-3 w-full sm:w-auto justify-end">
+                <!-- User Active Identity Email Badge -->
+                <div class="flex items-center gap-2 bg-corporate-800 border border-corporate-700 px-3 py-1.5 rounded-lg text-xs">
+                    <i class="fa-solid fa-circle-user text-brand-400"></i>
+                    <span class="text-corporate-400 font-medium">Logged in as:</span>
+                    <input type="email" id="userEmailInput" onchange="updateUserEmail(this.value)" placeholder="your.email@company.com" 
+                        class="bg-corporate-950 text-white border border-corporate-700 rounded px-2 py-0.5 text-xs focus:outline-none focus:border-brand-500 w-48 font-mono">
+                </div>
+
                 <a id="addContractBtn" href="#" target="_blank" class="bg-brand-600 hover:bg-brand-700 text-white font-semibold px-4 py-2 rounded-lg text-xs transition-all shadow-sm hover:shadow flex items-center gap-2 border border-brand-500/30">
                     <i class="fa-solid fa-plus text-xs"></i> Add New Contract
                 </a>
@@ -198,6 +207,7 @@
 
     </main>
 
+    <!-- Slide-Over Drawer Modal -->
     <div id="summaryModal" class="fixed inset-0 bg-corporate-950/60 backdrop-blur-xs hidden justify-end z-50 transition-opacity">
         <div class="bg-white h-full w-full max-w-xl shadow-2xl flex flex-col border-l border-corporate-200 overflow-hidden transform transition-transform duration-300">
             
@@ -238,6 +248,8 @@
                             <span class="w-5 h-5 rounded-full bg-brand-100 text-brand-700 text-[10px] font-bold flex items-center justify-center border border-brand-300">L</span>
                             <span id="drawerAssignee" class="font-semibold text-corporate-800">Lauren Oh</span>
                         </div>
+                        <!-- Assignee Email Display -->
+                        <span id="drawerAssigneeEmail" class="text-[10px] text-brand-600 font-mono block mt-0.5">lauren.oh@company.com</span>
                     </div>
                     <div>
                         <span class="text-corporate-400 font-medium block text-[11px]">Intake ID</span>
@@ -383,11 +395,14 @@
                     </div>
 
                     <!-- Add Activity Input -->
-                    <div class="flex items-center gap-2 pt-2">
-                        <input type="text" id="newActivityInput" placeholder="Add note or comment on document..." class="flex-grow bg-corporate-50 border border-corporate-300 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-brand-600 focus:bg-white transition" onkeypress="if(event.key === 'Enter') addActivityComment()">
-                        <button onclick="addActivityComment()" class="bg-corporate-900 hover:bg-corporate-800 text-white px-3 py-2 rounded-lg text-xs font-semibold transition shrink-0">
-                            Post
-                        </button>
+                    <div class="space-y-1.5 pt-2">
+                        <div class="flex items-center gap-2">
+                            <input type="text" id="newActivityInput" placeholder="Add note or comment on document..." class="flex-grow bg-corporate-50 border border-corporate-300 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-brand-600 focus:bg-white transition" onkeypress="if(event.key === 'Enter') addActivityComment()">
+                            <button onclick="addActivityComment()" class="bg-corporate-900 hover:bg-corporate-800 text-white px-3 py-2 rounded-lg text-xs font-semibold transition shrink-0">
+                                Post
+                            </button>
+                        </div>
+                        <p class="text-[10px] text-corporate-400">Commenting as: <span id="commentingAsEmail" class="font-mono text-brand-600 font-medium">user@company.com</span></p>
                     </div>
                 </div>
 
@@ -408,24 +423,27 @@
 
     <script>
         // =========================================================================
-        // GOOGLE SHEETS CONFIGURATION (MULTI-SHEET SUPPORT)
+        // GOOGLE SHEETS & APPS SCRIPT CONFIGURATION
         // =========================================================================
         
+        // Google Apps Script Endpoint for Persistence across Users (Optional but Recommended)
+        const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/a/macros/tractorjunction.com/s/AKfycbz2lyMt2Jb2IElzOZgySIubKDhDh2ocA0CmHkrssRwQhHfAXWU0Lq7on9nq-9JGAOk/exec';
+
         // Sheet 1: Centres Repository
         const GOOGLE_SHEET_CENTRES_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQrGOHferuZiUdl8PjvDaPQhC7QBf2JFKFqdML0W2jyUARs-iTIR6s86NO_pGvO5tkyDIAYP8HG380M/pub?output=csv'; 
-        const GOOGLE_SHEET_CENTRES_EDIT_URL = 'https://docs.google.com/spreadsheets/d/1T3Ii9xroZzCT_ieaAYI3D4qI_TsD8GLfmLPsyqAi4BE/edit?gid=0#gid=0'; 
+        const GOOGLE_SHEET_CENTRES_EDIT_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQrGOHferuZiUdl8PjvDaPQhC7QBf2JFKFqdML0W2jyUARs-iTIR6s86NO_pGvO5tkyDIAYP8HG380M/pub?output=csvhttps://docs.google.com/spreadsheets/d/e/2PACX-1vQrGOHferuZiUdl8PjvDaPQhC7QBf2JFKFqdML0W2jyUARs-iTIR6s86NO_pGvO5tkyDIAYP8HG380M/pub?output=csv'; 
 
         // Sheet 2: Dealerships Repository
         const GOOGLE_SHEET_DEALERSHIPS_CSV_URL = 'YOUR_DEALERSHIPS_SHEET_CSV_URL_HERE'; 
-        const GOOGLE_SHEET_DEALERSHIPS_EDIT_URL = 'https://docs.google.com/spreadsheets/d/1T3Ii9xroZzCT_ieaAYI3D4qI_TsD8GLfmLPsyqAi4BE/edit?gid=307806377#gid=307806377'; 
+        const GOOGLE_SHEET_DEALERSHIPS_EDIT_URL = 'YOUR_DEALERSHIPS_SHEET_EDIT_URL_HERE'; 
 
         // Sheet 3: Offices Repository
         const GOOGLE_SHEET_OFFICES_CSV_URL = 'YOUR_OFFICES_SHEET_CSV_URL_HERE'; 
-        const GOOGLE_SHEET_OFFICES_EDIT_URL = 'https://docs.google.com/spreadsheets/d/1T3Ii9xroZzCT_ieaAYI3D4qI_TsD8GLfmLPsyqAi4BE/edit?gid=671567856#gid=671567856'; 
+        const GOOGLE_SHEET_OFFICES_EDIT_URL = 'YOUR_OFFICES_SHEET_EDIT_URL_HERE'; 
 
-        // Legacy / Single Combined Sheet Fallback
+        // Fallback Single Sheet
         const GOOGLE_SHEET_CSV_URL = 'YOUR_GOOGLE_SHEET_CSV_URL_HERE'; 
-        const GOOGLE_SHEET_EDIT_URL = 'https://docs.google.com/spreadsheets/d/1T3Ii9xroZzCT_ieaAYI3D4qI_TsD8GLfmLPsyqAi4BE/edit?gid=0#gid=0'; 
+        const GOOGLE_SHEET_EDIT_URL = 'YOUR_EDITABLE_GOOGLE_SHEET_URL_HERE'; 
 
         const sampleContractData = [
             {
@@ -439,6 +457,8 @@
                 "Term": "36 Months",
                 "Start Date": "01/04/2024",
                 "Expiry Date": "31/03/2027",
+                "Assignee": "Lauren Oh",
+                "Assignee Email": "lauren.oh@company.com",
                 "Latest Rent Agreement": "https://example.com/agreements/mumbai-apex.pdf",
                 "Indemnity Clause": "Comprehensive Lessee indemnity covering title defects and operational hazards."
             },
@@ -453,6 +473,8 @@
                 "Term": "60 Months",
                 "Start Date": "15/01/2023",
                 "Expiry Date": "14/01/2028",
+                "Assignee": "Rahul Sharma",
+                "Assignee Email": "rahul.sharma@company.com",
                 "Latest Rent Agreement": "https://example.com/agreements/bengaluru-dealership.pdf",
                 "Indemnity Clause": "Lessor indemnifies Lessee against past zoning disputes and structural compliance."
             },
@@ -467,48 +489,30 @@
                 "Term": "36 Months",
                 "Start Date": "01/09/2024",
                 "Expiry Date": "31/08/2027",
+                "Assignee": "Priya Verma",
+                "Assignee Email": "priya.verma@company.com",
                 "Latest Rent Agreement": "https://example.com/agreements/gurugram-hq.pdf",
                 "Indemnity Clause": "Standard mutual indemnity protecting both parties from third-party liabilities."
-            },
-            {
-                "State": "TN",
-                "Entity Name": "OMR Realty & Operations Pvt Ltd",
-                "Centre Name": "Chennai OMR Facility",
-                "Type": "Centre",
-                "Status": "Closed",
-                "Monthly Rent Amount (in Rs.)": "1,90,000",
-                "Security Deposit Amount (in Rs.)": "11,40,000",
-                "Term": "11 Months",
-                "Start Date": "01/06/2022",
-                "Expiry Date": "30/04/2023",
-                "Latest Rent Agreement": "https://example.com/agreements/chennai-omr.pdf",
-                "Indemnity Clause": "Terminated lease agreement; security deposit fully settled."
-            },
-            {
-                "State": "TS",
-                "Entity Name": "Auto Auto Mobility Private Limited",
-                "Centre Name": "Hyderabad Auto Auto Dealership",
-                "Type": "Dealership",
-                "Status": "Active",
-                "Monthly Rent Amount (in Rs.)": "4,30,000",
-                "Security Deposit Amount (in Rs.)": "25,80,000",
-                "Term": "36 Months",
-                "Start Date": "10/10/2023",
-                "Expiry Date": "09/10/2026",
-                "Latest Rent Agreement": "https://example.com/agreements/hyderabad-dealership.pdf",
-                "Indemnity Clause": "Full lessor title guarantee with zero-encumbrance hold harmless indemnity."
             }
         ];
 
         let contractData = [];
         let currentTab = 'All';
         let currentActiveRecordIndex = null;
-        let recordActivities = {}; // Activity logs stored per record index
+        let recordActivities = {}; 
+        let currentUserEmail = localStorage.getItem('activeUserEmail') || 'reviewer@company.com';
+
+        function updateUserEmail(val) {
+            if (!val || !val.includes('@')) return;
+            currentUserEmail = val.trim();
+            localStorage.setItem('activeUserEmail', currentUserEmail);
+            const label = document.getElementById('commentingAsEmail');
+            if (label) label.innerText = currentUserEmail;
+        }
 
         function switchTab(tabName) {
             currentTab = tabName;
             
-            // Update active state on tabs
             document.querySelectorAll('.repo-tab').forEach(btn => {
                 btn.className = "repo-tab px-4 py-2 rounded-lg transition-all flex items-center gap-2 text-corporate-300 hover:text-white hover:bg-corporate-800";
             });
@@ -518,7 +522,6 @@
                 activeBtn.className = "repo-tab px-4 py-2 rounded-lg transition-all flex items-center gap-2 bg-brand-600 text-white shadow-sm border border-brand-500/30";
             }
 
-            // Update Add New Contract button link based on current tab sheet link
             const addBtn = document.getElementById('addContractBtn');
             if (tabName === 'Dealership' && GOOGLE_SHEET_DEALERSHIPS_EDIT_URL !== 'YOUR_DEALERSHIPS_SHEET_EDIT_URL_HERE') {
                 addBtn.href = GOOGLE_SHEET_DEALERSHIPS_EDIT_URL;
@@ -561,36 +564,27 @@
 
         function getColumnValue(row, possibleNames) {
             if (!row || typeof row !== 'object') return '';
-            
             const keys = Object.keys(row);
             
-            // Pass 1: Exact normalized string match
             for (let name of possibleNames) {
                 const normName = normalizeStr(name);
                 for (let key of keys) {
                     if (normalizeStr(key) === normName) {
                         const val = row[key];
-                        if (val !== undefined && val !== null && val.toString().trim() !== '') {
-                            return val.toString().trim();
-                        }
+                        if (val !== undefined && val !== null && val.toString().trim() !== '') return val.toString().trim();
                     }
                 }
             }
 
-            // Pass 2: Fuzzy substring match
             for (let name of possibleNames) {
                 const normName = normalizeStr(name);
                 for (let key of keys) {
-                    const normKey = normalizeStr(key);
-                    if (normKey.includes(normName) || normName.includes(normKey)) {
+                    if (normalizeStr(key).includes(normName) || normName.includes(normalizeStr(key))) {
                         const val = row[key];
-                        if (val !== undefined && val !== null && val.toString().trim() !== '') {
-                            return val.toString().trim();
-                        }
+                        if (val !== undefined && val !== null && val.toString().trim() !== '') return val.toString().trim();
                     }
                 }
             }
-
             return '';
         }
 
@@ -611,12 +605,11 @@
 
             let filtered = contractData.filter(row => {
                 if (currentTab === 'All') return true;
-                let repoType = getColumnValue(row, ['Type', 'Category', 'Property Type', 'Facility Type', 'Repository', 'SheetType']) || '';
+                let repoType = getColumnValue(row, ['Type', 'Category', 'Property Type', 'Facility Type', 'Repository']) || '';
                 if (!repoType) return true;
                 return repoType.toLowerCase().includes(currentTab.toLowerCase());
             });
 
-            // Update Statistics Counters
             let total = filtered.length;
             let active = 0;
             let closed = 0;
@@ -628,7 +621,7 @@
                 } else if (status.toLowerCase().includes('close') || status.toLowerCase().includes('terminate') || status.toLowerCase().includes('expir')) {
                     closed++;
                 } else {
-                    active++; // Default active count fallback
+                    active++;
                 }
             });
 
@@ -647,13 +640,13 @@
                 return;
             }
 
-            filtered.forEach((row, index) => {
+            filtered.forEach((row) => {
                 let realIndex = contractData.indexOf(row);
-                let state = getColumnValue(row, ['State', 'STATE', 'State Name', 'State Code', 'Region', 'State/UT']) || '-';
-                let entityName = getColumnValue(row, ['Entity Name', 'ENTITY NAME', 'Entity', 'Legal Entity', 'Company Name', 'Lessee']) || '-';
-                let centreName = getColumnValue(row, ['Centre Name', 'CENTRE NAME', 'Centre', 'Facility Name', 'Facility']) || 'Facility Record';
+                let state = getColumnValue(row, ['State', 'STATE', 'State Name', 'State Code', 'Region']) || '-';
+                let entityName = getColumnValue(row, ['Entity Name', 'ENTITY NAME', 'Entity', 'Legal Entity', 'Company Name']) || '-';
+                let centreName = getColumnValue(row, ['Centre Name', 'CENTRE NAME', 'Centre', 'Facility Name']) || 'Facility Record';
                 let startDate = getColumnValue(row, ['Start Date', 'Agreement Start Date', 'Commencement Date']) || '-';
-                let expiryDate = getColumnValue(row, ['Expiry Date', 'Agreement Expiry Date', 'End Date', 'Termination Date']) || '-';
+                let expiryDate = getColumnValue(row, ['Expiry Date', 'Agreement Expiry Date', 'End Date']) || '-';
                 let status = (getColumnValue(row, ['Status', 'STATUS', 'Agreement Status']) || 'Active').toString().trim();
                 let agreementLink = findUrlColumn(row);
 
@@ -740,9 +733,7 @@
                                 }
                                 resolve();
                             },
-                            error: function() {
-                                resolve();
-                            }
+                            error: function() { resolve(); }
                         });
                     });
                 });
@@ -797,20 +788,24 @@
             let row = contractData[index];
             if (!row) return;
 
-            let entityName = getColumnValue(row, ['Entity Name', 'ENTITY NAME', 'Entity', 'Legal Entity', 'Company Name', 'Lessee']) || 'N/A';
-            let centreName = getColumnValue(row, ['Centre Name', 'CENTRE NAME', 'Centre', 'Facility Name', 'Facility']) || 'Centre Contract';
+            let entityName = getColumnValue(row, ['Entity Name', 'ENTITY NAME', 'Entity', 'Legal Entity', 'Company Name']) || 'N/A';
+            let centreName = getColumnValue(row, ['Centre Name', 'CENTRE NAME', 'Centre', 'Facility Name']) || 'Centre Contract';
             let status = (getColumnValue(row, ['Status', 'STATUS', 'Agreement Status']) || 'Active').toString().trim();
-            let rent = getColumnValue(row, ['Monthly Rent Amount (in Rs.)', 'Monthly Rent Amount', 'Monthly Rent', 'Rent']) || 'N/A';
-            let deposit = getColumnValue(row, ['Security Deposit Amount (in Rs.)', 'Security Deposit Amount', 'Security Deposit']) || 'N/A';
+            let rent = getColumnValue(row, ['Monthly Rent Amount (in Rs.)', 'Monthly Rent Amount', 'Monthly Rent']) || 'N/A';
+            let deposit = getColumnValue(row, ['Security Deposit Amount (in Rs.)', 'Security Deposit Amount']) || 'N/A';
             let term = getColumnValue(row, ['Term', 'Tenure', 'Agreement Term']) || 'N/A';
             let startDate = getColumnValue(row, ['Start Date', 'Agreement Start Date', 'Commencement Date']) || 'N/A';
-            let expiryDate = getColumnValue(row, ['Expiry Date', 'Agreement Expiry Date', 'End Date', 'Termination Date']) || 'N/A';
+            let expiryDate = getColumnValue(row, ['Expiry Date', 'Agreement Expiry Date', 'End Date']) || 'N/A';
+            let assignee = getColumnValue(row, ['Assignee', 'Owner', 'Legal Contact']) || 'Lauren Oh';
+            let assigneeEmail = getColumnValue(row, ['Assignee Email', 'Owner Email', 'Contact Email']) || 'lauren.oh@company.com';
             let agreementLink = findUrlColumn(row) || '#';
-            let indemnityText = getColumnValue(row, ['Indemnity Clause', 'Indemnity']) || `Standard Lessee indemnity protects against property title defects and statutory non-compliance during occupancy at ${centreName}.`;
+            let indemnityText = getColumnValue(row, ['Indemnity Clause', 'Indemnity']) || `Standard Lessee indemnity protects against property title defects and statutory non-compliance at ${centreName}.`;
 
             document.getElementById('modalCentreName').innerText = centreName;
             document.getElementById('modalEntityText').innerText = entityName;
             document.getElementById('drawerCounterparty').innerText = entityName;
+            document.getElementById('drawerAssignee').innerText = assignee;
+            document.getElementById('drawerAssigneeEmail').innerText = assigneeEmail;
             document.getElementById('drawerIntakeId').innerText = `Legal-${1000 + index}`;
             
             let statusBadge = document.getElementById('modalStatusBadge');
@@ -834,9 +829,8 @@
 
             if (!recordActivities[index]) {
                 recordActivities[index] = [
-                    { author: 'Lauren', role: 'Assignee', text: 'Started a thread for initial agreement review.', time: '5m ago', icon: 'L' },
-                    { author: 'AI Assistant', role: 'System', text: 'Auto-reviewed 12 clauses against corporate standard playbook.', time: '12m ago', icon: 'AI' },
-                    { author: 'Legal Team', role: 'Counsel', text: 'Verified title deeds and lease commencement timeline.', time: '1h ago', icon: 'L' }
+                    { author: assignee, role: 'Assignee', text: `Started review thread for ${centreName}.`, time: '5m ago', icon: assignee.charAt(0).toUpperCase(), email: assigneeEmail },
+                    { author: 'AI Assistant', role: 'System', text: 'Auto-reviewed 12 clauses against corporate standard playbook.', time: '12m ago', icon: 'AI', email: 'system@ai.com' }
                 ];
             }
 
@@ -862,7 +856,7 @@
                     <span class="w-6 h-6 rounded-full bg-brand-100 text-brand-800 text-[10px] font-bold flex items-center justify-center shrink-0 border border-brand-300 mt-0.5">${act.icon}</span>
                     <div class="flex-grow">
                         <div class="flex justify-between items-center">
-                            <span class="font-bold text-corporate-900">${act.author} <span class="text-[10px] font-normal text-corporate-400">(${act.role})</span></span>
+                            <span class="font-bold text-corporate-900">${act.author} <span class="text-[10px] font-normal text-corporate-400 font-mono">(${act.email || act.role})</span></span>
                             <span class="text-[10px] text-corporate-400">${act.time}</span>
                         </div>
                         <p class="text-corporate-700 font-normal text-[11px] mt-0.5">${act.text}</p>
@@ -881,13 +875,32 @@
                 recordActivities[currentActiveRecordIndex] = [];
             }
 
-            recordActivities[currentActiveRecordIndex].unshift({
-                author: 'You',
+            const newLog = {
+                author: currentUserEmail.split('@')[0],
                 role: 'Reviewer',
                 text: val,
                 time: 'Just now',
-                icon: 'Y'
-            });
+                icon: currentUserEmail.charAt(0).toUpperCase(),
+                email: currentUserEmail
+            };
+
+            recordActivities[currentActiveRecordIndex].unshift(newLog);
+
+            // Post to backend Google Apps Script Endpoint if available
+            if (GOOGLE_APPS_SCRIPT_URL !== 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE') {
+                fetch(GOOGLE_APPS_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        recordId: currentActiveRecordIndex,
+                        author: currentUserEmail,
+                        role: 'Reviewer',
+                        text: val,
+                        timestamp: new Date().toISOString()
+                    })
+                }).catch(e => console.log('Apps script log sync issue:', e));
+            }
 
             input.value = '';
             renderActivityThread(currentActiveRecordIndex);
@@ -904,12 +917,15 @@
                 recordActivities[currentActiveRecordIndex] = [];
             }
 
+            const reqText = `Submitted request [${cat}] (${prio})${notes ? ': ' + notes : ''}`;
+
             recordActivities[currentActiveRecordIndex].unshift({
-                author: 'You',
+                author: currentUserEmail.split('@')[0],
                 role: 'Requested Review',
-                text: `Submitted request [${cat}] (${prio})${notes ? ': ' + notes : ''}`,
+                text: reqText,
                 time: 'Just now',
-                icon: 'R'
+                icon: 'R',
+                email: currentUserEmail
             });
 
             document.getElementById('reqNotes').value = '';
@@ -924,6 +940,19 @@
         }
 
         window.onload = function() {
+            const savedEmail = localStorage.getItem('activeUserEmail');
+            if (savedEmail) {
+                currentUserEmail = savedEmail;
+                const emailInput = document.getElementById('userEmailInput');
+                if (emailInput) emailInput.value = savedEmail;
+            } else {
+                const emailInput = document.getElementById('userEmailInput');
+                if (emailInput) emailInput.value = currentUserEmail;
+            }
+            
+            const label = document.getElementById('commentingAsEmail');
+            if (label) label.innerText = currentUserEmail;
+
             initializeData();
         };
     </script>
