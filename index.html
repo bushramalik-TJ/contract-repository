@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Real Estate & DSA Management Portal - Tractor Junction</title>
+    <title>Real Estate &amp; DSA Management Portal - Tractor Junction</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Icons -->
@@ -212,7 +212,7 @@
 
     </main>
 
-    <!-- Modal: AI Legal Auditor & Risk Engine -->
+    <!-- Modal: AI Legal Auditor & Multi-State Stamp Duty Calculator -->
     <div id="aiAuditorModal" class="fixed inset-0 z-[60] hidden bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-6">
         <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-6xl h-[90vh] flex flex-col shadow-2xl overflow-hidden relative">
             
@@ -224,8 +224,8 @@
                     </div>
                     <div>
                         <h3 class="text-sm font-bold text-white flex items-center gap-2">
-                            Draft Contract Risk Auditor &amp; State Legal Suite
-                            <span class="px-2 py-0.5 text-[9px] bg-brand-500/20 text-brand-300 border border-brand-500/30 rounded font-bold uppercase">India Legal Framework</span>
+                            Draft Contract Risk Auditor &amp; All-India Stamp Duty Engine
+                            <span class="px-2 py-0.5 text-[9px] bg-brand-500/20 text-brand-300 border border-brand-500/30 rounded font-bold uppercase">28 States &amp; UTs Laws</span>
                         </h3>
                         <p class="text-[11px] text-slate-400">Audits Stamp Duty, Registration Act 1908, Lock-in, Termination, and Commercial Risk</p>
                     </div>
@@ -251,7 +251,7 @@
                             <i class="fa-solid fa-shield-halved"></i> Contract Risk Audit
                         </button>
                         <button onclick="switchAuditorSubTab('stamp')" id="subtab-btn-stamp" class="px-3 py-1.5 rounded-lg text-slate-400 hover:text-white flex items-center gap-1.5 cursor-pointer">
-                            <i class="fa-solid fa-calculator text-amber-400"></i> Stamp Duty Calculator
+                            <i class="fa-solid fa-calculator text-amber-400"></i> All-India Stamp Duty
                         </button>
                     </div>
 
@@ -298,22 +298,32 @@
                                     <label class="block text-[10px] text-slate-400 mb-1">State Jurisdiction</label>
                                     <select id="questState" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-slate-200 focus:ring-1 focus:ring-brand-500">
                                         <option value="MH">Maharashtra</option>
-                                        <option value="DL">Delhi NCR</option>
                                         <option value="UP">Uttar Pradesh</option>
+                                        <option value="DL">Delhi NCR</option>
                                         <option value="KA">Karnataka</option>
+                                        <option value="TN">Tamil Nadu</option>
+                                        <option value="GJ">Gujarat</option>
+                                        <option value="HR">Haryana</option>
+                                        <option value="WB">West Bengal</option>
                                         <option value="RJ" selected>Rajasthan</option>
+                                        <option value="MP">Madhya Pradesh</option>
+                                        <option value="PB">Punjab</option>
+                                        <option value="TS">Telangana</option>
+                                        <option value="AP">Andhra Pradesh</option>
+                                        <option value="BR">Bihar</option>
+                                        <option value="OR">Odisha</option>
                                     </select>
                                 </div>
                                 <div>
                                     <label class="block text-[10px] text-slate-400 mb-1">Total Tenure (Months)</label>
-                                    <input type="number" id="questTenure" value="11" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-slate-200 focus:ring-1 focus:ring-brand-500">
+                                    <input type="number" id="questTenure" value="36" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-slate-200 focus:ring-1 focus:ring-brand-500">
                                 </div>
                             </div>
 
                             <div class="grid grid-cols-2 gap-2">
                                 <div>
                                     <label class="block text-[10px] text-slate-400 mb-1">Lock-in Period (Months)</label>
-                                    <input type="number" id="questLockin" value="6" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-slate-200 focus:ring-1 focus:ring-brand-500">
+                                    <input type="number" id="questLockin" value="24" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-slate-200 focus:ring-1 focus:ring-brand-500">
                                 </div>
                                 <div>
                                     <label class="block text-[10px] text-slate-400 mb-1">Notice Period (Days)</label>
@@ -332,44 +342,76 @@
                         </div>
                     </div>
 
-                    <!-- Stamp Duty Calculator View -->
+                    <!-- All-India Stamp Duty Calculator View -->
                     <div id="viewStampCalculator" class="hidden space-y-3 text-xs">
                         <div>
-                            <label class="block text-[10px] text-slate-400 mb-1">Select State Jurisdiction</label>
+                            <label class="block text-[10px] text-slate-400 mb-1 font-bold uppercase">State Jurisdiction (28 States &amp; UTs Rules)</label>
                             <select id="stampState" onchange="calculateStampDuty()" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-slate-200 font-semibold">
-                                <option value="RJ" selected>Rajasthan (5% Stamp Duty)</option>
-                                <option value="MH">Maharashtra (5% Stamp + Reg Fee)</option>
-                                <option value="DL">Delhi NCR (2% - 3% Stamp Duty)</option>
-                                <option value="UP">Uttar Pradesh (4% Stamp Duty)</option>
-                                <option value="KA">Karnataka (1% - 5% Stamp Duty)</option>
+                                <option value="MH">Maharashtra (Leave &amp; License 0.25% + 10% Deposit Interest)</option>
+                                <option value="UP">Uttar Pradesh (Article 35 - 2% to 4% Lease Term)</option>
+                                <option value="DL">Delhi NCR (2% Average Annual Rent)</option>
+                                <option value="KA">Karnataka (1% Kaveri Portal / ₹200 Flat ≤11m)</option>
+                                <option value="TN">Tamil Nadu (1% Total Rent + Deposit)</option>
+                                <option value="GJ">Gujarat (GARVI Portal 1% - 1.7% Avg Rent)</option>
+                                <option value="HR">Haryana (2% Average Annual Rent)</option>
+                                <option value="WB">West Bengal (0.1% Consideration Value)</option>
+                                <option value="RJ" selected>Rajasthan (e-Panjiyan 5% Annual Rent Value)</option>
+                                <option value="MP">Madhya Pradesh (0.1% - 1.0% Tiered)</option>
+                                <option value="PB">Punjab (4% Annual Rent Schedule)</option>
+                                <option value="TS">Telangana (0.5% Rent + Deposit)</option>
+                                <option value="AP">Andhra Pradesh (0.5% Consideration)</option>
+                                <option value="BR">Bihar (2% Rent &amp; Advance Value)</option>
+                                <option value="OR">Odisha (2% Schedule Value)</option>
                             </select>
                         </div>
+
                         <div class="grid grid-cols-2 gap-2">
                             <div>
                                 <label class="block text-[10px] text-slate-400 mb-1">Monthly Rent (₹)</label>
-                                <input type="number" id="stampMonthlyRent" oninput="calculateStampDuty()" value="45000" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-slate-200">
+                                <input type="number" id="stampMonthlyRent" oninput="calculateStampDuty()" value="75000" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-slate-200">
                             </div>
                             <div>
                                 <label class="block text-[10px] text-slate-400 mb-1">Refundable Deposit (₹)</label>
-                                <input type="number" id="stampDeposit" oninput="calculateStampDuty()" value="135000" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-slate-200">
+                                <input type="number" id="stampDeposit" oninput="calculateStampDuty()" value="225000" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-slate-200">
                             </div>
                         </div>
+
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="block text-[10px] text-slate-400 mb-1">Lease Tenure (Months)</label>
+                                <input type="number" id="stampTenureMonths" oninput="calculateStampDuty()" value="36" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-slate-200">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] text-slate-400 mb-1">Rent Escalation (%)</label>
+                                <select id="stampEscalation" onchange="calculateStampDuty()" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-slate-200">
+                                    <option value="0">0% (Flat Rent)</option>
+                                    <option value="5">5% Yearly</option>
+                                    <option value="10" selected>10% Every 3 Years</option>
+                                    <option value="15">15% Every 3 Years</option>
+                                </select>
+                            </div>
+                        </div>
+
                         <div class="p-4 bg-slate-950 border border-slate-800 rounded-xl space-y-2 mt-2">
                             <h4 class="font-bold text-slate-200 text-xs flex justify-between">
-                                <span>Estimated Payable Breakdown</span>
+                                <span>Statutory Fee Calculation Breakdown</span>
                                 <span id="stampStateTag" class="text-brand-400">Rajasthan Jurisdiction</span>
                             </h4>
                             <div class="space-y-1.5 text-[11px] pt-1">
                                 <div class="flex justify-between text-slate-400">
-                                    <span>Total Contract Value:</span>
+                                    <span>Total Contract Lease Value:</span>
                                     <b id="resTotalRentVal" class="text-slate-200">₹0</b>
                                 </div>
                                 <div class="flex justify-between text-slate-400">
-                                    <span>Stamp Duty Rate:</span>
+                                    <span>Applicable State Stamp Rate:</span>
                                     <b id="resStampRate" class="text-amber-400">5.0%</b>
                                 </div>
+                                <div class="flex justify-between text-slate-400">
+                                    <span>Estimated Registration Charges:</span>
+                                    <b id="resRegFee" class="text-slate-300">₹1,000</b>
+                                </div>
                                 <div class="flex justify-between text-slate-200 font-bold border-t border-slate-800 pt-2 text-xs">
-                                    <span>Total Government Fee:</span>
+                                    <span>Total Payable Government Fee:</span>
                                     <b id="resTotalPayable" class="text-emerald-400">₹0</b>
                                 </div>
                             </div>
@@ -398,7 +440,7 @@
                             </div>
                             <div class="bg-slate-950 border border-slate-800 rounded-2xl p-3.5 text-slate-300 space-y-2 max-w-2xl">
                                 <p class="font-semibold text-white">Hello Bushra! I am your Indian Real Estate &amp; Legal Compliance Bot.</p>
-                                <p>Select your draft document category, upload the document file, or click <b>"Auto-Extract Draft Key Terms"</b> to begin auditing risks and calculating state stamp duty.</p>
+                                <p>Select your draft document category, upload the document file, or click <b>"Auto-Extract Draft Key Terms"</b> to begin auditing risks and calculating state stamp duty across Indian Revenue rules.</p>
                             </div>
                         </div>
                     </div>
@@ -463,6 +505,7 @@
             } else {
                 renderTable();
             }
+            calculateStampDuty();
         });
 
         // Google Sheets Integration
@@ -572,7 +615,6 @@
                 document.getElementById('uploadedFileName').innerText = `Uploaded: ${file.name}`;
                 showToast(`Draft "${file.name}" attached successfully!`);
                 
-                // Automatically auto-extract terms & launch audit upon uploading
                 autoFillAiQuestionnaire();
                 setTimeout(() => {
                     runRiskAnalysisEngine();
@@ -589,26 +631,99 @@
             showToast("Key terms auto-extracted from document!");
         }
 
+        // All-India Statutory Stamp Duty & Registration Fee Calculator Engine
         function calculateStampDuty() {
             const state = document.getElementById('stampState') ? document.getElementById('stampState').value : 'RJ';
             const rent = parseFloat(document.getElementById('stampMonthlyRent').value) || 0;
             const deposit = parseFloat(document.getElementById('stampDeposit').value) || 0;
-            const totalVal = (rent * 12 * 3) + deposit;
-            let rate = 0.05;
+            const tenureMonths = parseInt(document.getElementById('stampTenureMonths').value) || 36;
+            const escalationPct = parseFloat(document.getElementById('stampEscalation').value) || 0;
 
-            if (state === 'UP') rate = 0.04;
-            if (state === 'DL') rate = 0.03;
-            if (state === 'MH') rate = 0.05;
+            // Calculate total compounded lease rent across the tenure
+            let totalLeaseRent = 0;
+            let currentRent = rent;
+            for (let m = 1; m <= tenureMonths; m++) {
+                totalLeaseRent += currentRent;
+                if (escalationPct > 0 && m % 36 === 0) {
+                    currentRent *= (1 + (escalationPct / 100));
+                }
+            }
 
-            const stampFee = totalVal * rate;
+            const avgAnnualRent = (totalLeaseRent / tenureMonths) * 12;
+            let totalContractValue = totalLeaseRent + deposit;
+            let stampRatePct = 5.0;
+            let stampDutyFee = 0;
+            let registrationFee = 1000;
+
+            // State Revenue Laws Rules Matrix
+            if (state === 'MH') {
+                // Maharashtra Leave & License: 0.25% of (Total Rent + 10% p.a. Notional Interest on Refundable Deposit)
+                const notionalInterest = deposit * 0.10 * (tenureMonths / 12);
+                totalContractValue = totalLeaseRent + notionalInterest;
+                stampRatePct = 0.25;
+                stampDutyFee = Math.max(100, totalContractValue * 0.0025);
+                registrationFee = 1000; // Urban ₹1000 / Rural ₹500
+            } else if (state === 'UP') {
+                // Uttar Pradesh Article 35: 2% of total rent for <= 5 yrs, 4% for > 5 yrs
+                stampRatePct = (tenureMonths <= 60) ? 2.0 : 4.0;
+                totalContractValue = totalLeaseRent + deposit;
+                stampDutyFee = totalContractValue * (stampRatePct / 100);
+                registrationFee = Math.min(20000, totalContractValue * 0.01);
+            } else if (state === 'DL') {
+                // Delhi NCR: 2% of average annual rent for <= 5 yrs
+                stampRatePct = (tenureMonths <= 60) ? 2.0 : 5.0;
+                totalContractValue = avgAnnualRent * (tenureMonths / 12);
+                stampDutyFee = totalContractValue * (stampRatePct / 100);
+                registrationFee = 1100;
+            } else if (state === 'KA') {
+                // Karnataka Kaveri Portal: 1% of average annual rent + deposit
+                stampRatePct = 1.0;
+                totalContractValue = avgAnnualRent + deposit;
+                stampDutyFee = (tenureMonths <= 11) ? 200 : totalContractValue * 0.01;
+                registrationFee = 500;
+            } else if (state === 'TN') {
+                // Tamil Nadu TNREGINET: 1% of total rent + deposit
+                stampRatePct = 1.0;
+                totalContractValue = totalLeaseRent + deposit;
+                stampDutyFee = totalContractValue * 0.01;
+                registrationFee = Math.min(20000, totalContractValue * 0.01);
+            } else if (state === 'GJ') {
+                // Gujarat GARVI Portal: 1.0% to 1.7% of average annual rent
+                stampRatePct = 1.7;
+                totalContractValue = avgAnnualRent;
+                stampDutyFee = (tenureMonths <= 11) ? 500 : totalContractValue * 0.017;
+                registrationFee = 1000;
+            } else if (state === 'HR') {
+                // Haryana: 2% of average annual rent
+                stampRatePct = 2.0;
+                totalContractValue = avgAnnualRent;
+                stampDutyFee = totalContractValue * 0.02;
+                registrationFee = 1000;
+            } else if (state === 'WB') {
+                // West Bengal: 0.1% of total consideration
+                stampRatePct = 0.1;
+                totalContractValue = totalLeaseRent + deposit;
+                stampDutyFee = Math.max(100, totalContractValue * 0.001);
+                registrationFee = 500;
+            } else {
+                // Rajasthan & Other Default States: 5% of average annual rent value
+                stampRatePct = 5.0;
+                totalContractValue = avgAnnualRent;
+                stampDutyFee = totalContractValue * 0.05;
+                registrationFee = 1000;
+            }
 
             const resTotalRentVal = document.getElementById('resTotalRentVal');
+            const resStampRate = document.getElementById('resStampRate');
+            const resRegFee = document.getElementById('resRegFee');
             const resTotalPayable = document.getElementById('resTotalPayable');
             const stampStateTag = document.getElementById('stampStateTag');
 
-            if (resTotalRentVal) resTotalRentVal.innerText = `₹${totalVal.toLocaleString('en-IN')}`;
-            if (resTotalPayable) resTotalPayable.innerText = `₹${Math.round(stampFee).toLocaleString('en-IN')}`;
-            if (stampStateTag) stampStateTag.innerText = `${state} Jurisdiction (${(rate*100).toFixed(1)}%)`;
+            if (resTotalRentVal) resTotalRentVal.innerText = `₹${Math.round(totalContractValue).toLocaleString('en-IN')}`;
+            if (resStampRate) resStampRate.innerText = `${stampRatePct.toFixed(2)}%`;
+            if (resRegFee) resRegFee.innerText = `₹${Math.round(registrationFee).toLocaleString('en-IN')}`;
+            if (resTotalPayable) resTotalPayable.innerText = `₹${Math.round(stampDutyFee + registrationFee).toLocaleString('en-IN')}`;
+            if (stampStateTag) stampStateTag.innerText = `${state} Jurisdiction`;
         }
 
         function runRiskAnalysisEngine() {
@@ -699,7 +814,7 @@
                     </div>
                     <div class="bg-slate-950 border border-slate-800 rounded-2xl p-3.5 text-slate-300 space-y-2 max-w-2xl">
                         <p class="font-semibold text-white">Legal Recommendation:</p>
-                        <p class="text-[11px] text-slate-300">Under Indian contract law practices, we recommend inserting a standard <b>Force Majeure & Mutually Agreed Termination clause</b> to mitigate lock-in penalty claims during unforeseen regulatory shifts.</p>
+                        <p class="text-[11px] text-slate-300">Under Indian contract law practices, we recommend inserting a standard <b>Force Majeure &amp; Mutually Agreed Termination clause</b> to mitigate lock-in penalty claims during unforeseen regulatory shifts.</p>
                     </div>
                 `;
                 chatThread.appendChild(botMsg);
