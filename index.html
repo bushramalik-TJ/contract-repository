@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Real Estate & DSA Management Portal - Tractor Junction</title>
+    <title>Real Estate & DSA Management Portal</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Icons -->
@@ -55,37 +55,22 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16 gap-4">
                 
-                <!-- Brand & Logo -->
                 <div class="flex items-center gap-3">
                     <div class="h-10 w-10 rounded-xl bg-gradient-to-tr from-brand-600 to-indigo-400 flex items-center justify-center text-white shadow-lg shadow-brand-500/20 font-black text-xl">
                         TJ
                     </div>
                     <div>
                         <h1 class="text-sm font-bold text-white tracking-tight flex items-center gap-2">
-                            Tractor Junction
+                            Tractor Junction Operations
                             <span id="sheetSyncBadge" class="px-2 py-0.5 text-[10px] uppercase font-bold tracking-wider rounded bg-brand-500/20 text-brand-300 border border-brand-500/30">Live Sync</span>
                         </h1>
                         <p class="text-xs text-slate-400">Real Estate & DSA Legal Management</p>
                     </div>
                 </div>
 
-                <!-- Main Module Switcher -->
-                <div class="flex items-center bg-slate-950 p-1 rounded-xl border border-slate-800/80 shadow-inner">
-                    <button id="module-btn-realestate" onclick="switchMainModule('RealEstate')" class="px-4 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-2 bg-brand-600 text-white shadow-sm">
-                        <i class="fa-solid fa-building"></i> Real Estate Repository
-                    </button>
-                    <button id="module-btn-dsa" onclick="switchMainModule('DSA')" class="px-4 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-white transition flex items-center gap-2">
-                        <i class="fa-solid fa-building-columns"></i> DSA Portal
-                    </button>
-                </div>
-
-                <!-- User Profile & Action Tools -->
                 <div class="flex items-center gap-3">
                     <button onclick="openAiAuditorModal('auditor')" class="px-3.5 py-1.5 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white rounded-lg text-xs font-bold transition flex items-center gap-2 shadow-lg shadow-amber-500/20">
-                        <i class="fa-solid fa-robot text-sm"></i> AI Legal Auditor & Stamp Duty
-                    </button>
-                    <button onclick="openWizardModal()" class="px-3 py-1.5 bg-brand-600/20 hover:bg-brand-600/30 text-brand-300 border border-brand-500/30 rounded-lg text-xs font-bold transition flex items-center gap-1.5" title="Setup Guide">
-                        <i class="fa-solid fa-wand-magic-sparkles text-amber-400"></i> Setup Guide
+                        <i class="fa-solid fa-robot text-sm"></i> AI Legal Risk Auditor
                     </button>
                     <button onclick="openConfigModal()" class="p-2 text-slate-400 hover:text-white bg-slate-800/60 hover:bg-slate-800 rounded-lg transition border border-slate-700/50" title="Settings">
                         <i class="fa-solid fa-gear"></i>
@@ -94,35 +79,10 @@
 
             </div>
         </div>
-
-        <!-- Real Estate Sub-Nav -->
-        <div id="realEstateSubNav" class="bg-slate-950/80 border-t border-slate-800/60 px-6 py-2">
-            <div class="max-w-7xl mx-auto flex items-center justify-between overflow-x-auto text-xs font-semibold">
-                <div class="flex items-center gap-2">
-                    <button onclick="switchTab('All')" id="re-tab-All" class="re-repo-tab px-3.5 py-1.5 rounded-lg transition flex items-center gap-2 bg-slate-800 text-white border border-slate-700">
-                        <i class="fa-solid fa-layer-group text-brand-400"></i> All Facilities
-                    </button>
-                    <button onclick="switchTab('Centres')" id="re-tab-Centres" class="re-repo-tab px-3.5 py-1.5 rounded-lg transition flex items-center gap-2 text-slate-400 hover:text-white hover:bg-slate-900">
-                        <i class="fa-solid fa-store"></i> Centres
-                    </button>
-                    <button onclick="switchTab('Dealerships')" id="re-tab-Dealerships" class="re-repo-tab px-3.5 py-1.5 rounded-lg transition flex items-center gap-2 text-slate-400 hover:text-white hover:bg-slate-900">
-                        <i class="fa-solid fa-tractor"></i> Dealerships
-                    </button>
-                    <button onclick="switchTab('Offices')" id="re-tab-Offices" class="re-repo-tab px-3.5 py-1.5 rounded-lg transition flex items-center gap-2 text-slate-400 hover:text-white hover:bg-slate-900">
-                        <i class="fa-solid fa-briefcase"></i> Offices
-                    </button>
-                </div>
-                <div class="text-[11px] text-slate-400 flex items-center gap-3">
-                    <span><i class="fa-solid fa-shield-halved text-brand-400 mr-1"></i> System Admin: <b class="text-slate-200">Bushramalik@tractorjunction.com</b></span>
-                </div>
-            </div>
-        </div>
     </header>
 
     <!-- Main Content Area -->
     <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
-        
-        <!-- Legal Risk Engine Banner -->
         <div class="bg-gradient-to-r from-slate-900 via-brand-950/40 to-slate-900 rounded-xl border border-brand-500/20 p-4 flex flex-col md:flex-row items-center justify-between gap-4 shadow-xl">
             <div class="flex items-center gap-3">
                 <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/30 flex items-center justify-center font-bold text-lg">
@@ -130,96 +90,28 @@
                 </div>
                 <div>
                     <h2 class="text-sm font-bold text-white flex items-center gap-2">
-                        Legal Risk Engine & Stamp Duty Calculator
-                        <span class="text-[10px] px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-semibold border border-emerald-500/30">Indian State Laws</span>
+                        Draft Legal & Business Risk AI Audit Suite
+                        <span class="text-[10px] px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-semibold border border-emerald-500/30">Scrollable Results Panel</span>
                     </h2>
+                    <p class="text-xs text-slate-400">Upload agreements to audit Stamp Duty, Registration Act 1908, Lock-in penalties, and export PDF reports.</p>
                 </div>
             </div>
-            <div class="flex items-center gap-2">
-                <button onclick="openAiAuditorModal('stamp')" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-bold rounded-lg text-xs transition flex items-center gap-2 whitespace-nowrap">
-                    <i class="fa-solid fa-calculator text-amber-400 text-sm"></i> Stamp Duty Calculator
-                </button>
-            </div>
+            <button onclick="openAiAuditorModal('auditor')" class="px-4 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold rounded-lg text-xs transition shadow-md shadow-amber-500/20 flex items-center gap-2 whitespace-nowrap">
+                <i class="fa-solid fa-robot text-sm"></i> Launch Risk Audit Bot
+            </button>
         </div>
 
-        <!-- Metric Cards Row -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            <div class="bg-slate-900/90 rounded-xl border border-slate-800 p-4 shadow-md flex items-center justify-between">
-                <div>
-                    <p id="statCard1Label" class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Centres</p>
-                    <h3 id="statTotalCentres" class="text-2xl font-black text-white mt-1">12</h3>
-                </div>
-                <div class="w-12 h-12 rounded-xl bg-brand-500/10 border border-brand-500/20 text-brand-400 flex items-center justify-center text-xl font-bold">
-                    <i class="fa-solid fa-folder-tree"></i>
-                </div>
-            </div>
-
-            <div class="bg-slate-900/90 rounded-xl border border-slate-800 p-4 shadow-md flex items-center justify-between">
-                <div>
-                    <p id="statCard2Label" class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Active Centres</p>
-                    <h3 id="statActiveCentres" class="text-2xl font-black text-emerald-400 mt-1">10</h3>
-                </div>
-                <div class="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center text-xl font-bold">
-                    <i class="fa-solid fa-circle-check"></i>
-                </div>
-            </div>
-
-            <div class="bg-slate-900/90 rounded-xl border border-slate-800 p-4 shadow-md flex items-center justify-between">
-                <div>
-                    <p id="statCard3Label" class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Closed Centres</p>
-                    <h3 id="statClosedCentres" class="text-2xl font-black text-amber-400 mt-1">2</h3>
-                </div>
-                <div class="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-center justify-center text-xl font-bold">
-                    <i class="fa-solid fa-stopwatch"></i>
-                </div>
-            </div>
+        <!-- Table Container -->
+        <div class="bg-slate-900 rounded-xl border border-slate-800 shadow-xl overflow-hidden p-6 text-center text-slate-400 text-xs">
+            <p><i class="fa-solid fa-database text-brand-400 mr-2"></i> Real Estate Repository active.</p>
         </div>
-
-        <!-- Controls Toolbar -->
-        <div class="bg-slate-900/80 rounded-xl border border-slate-800 p-4 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
-            <div class="relative w-full md:w-80">
-                <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-slate-500 text-xs"></i>
-                <input type="text" id="searchInput" oninput="renderTable()" placeholder="Search state, partner, facility..." class="w-full bg-slate-950 border border-slate-800 rounded-lg pl-9 pr-4 py-2 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition">
-            </div>
-            <div class="flex items-center gap-3 w-full md:w-auto justify-end flex-wrap">
-                <button onclick="fetchLatestSheetData()" class="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 rounded-lg text-xs font-semibold transition flex items-center gap-2">
-                    <i class="fa-solid fa-rotate text-brand-400"></i> Sync Sheets
-                </button>
-                <button onclick="openAddContractModal()" class="px-4 py-2 bg-brand-600 hover:bg-brand-500 text-white rounded-lg text-xs font-bold transition shadow-md shadow-brand-600/20 flex items-center gap-2">
-                    <i class="fa-solid fa-plus"></i> <span>Add Record</span>
-                </button>
-            </div>
-        </div>
-
-        <!-- Real Estate Data Table Container -->
-        <div class="bg-slate-900 rounded-xl border border-slate-800 shadow-xl overflow-hidden">
-            <div class="overflow-x-auto custom-scrollbar">
-                <table class="w-full text-left text-xs text-slate-300 border-collapse">
-                    <thead class="bg-slate-950 text-slate-400 uppercase tracking-wider font-bold border-b border-slate-800">
-                        <tr id="tableHeaderRow">
-                            <th class="py-3 px-4">State / ID</th>
-                            <th class="py-3 px-4">Centre / Facility</th>
-                            <th class="py-3 px-4">Entity Partner</th>
-                            <th class="py-3 px-4">Monthly Rent</th>
-                            <th class="py-3 px-4">Security Deposit</th>
-                            <th class="py-3 px-4">Status</th>
-                            <th class="py-3 px-4 text-right">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tableBody" class="divide-y divide-slate-800/60 font-medium">
-                        <!-- Dynamic Content Loaded Here -->
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
     </main>
 
-    <!-- AI Legal Auditor Chatbot Modal -->
+    <!-- AI Legal Auditor Chatbot & Risk Assessment Modal -->
     <div id="aiAuditorModal" class="fixed inset-0 z-50 hidden bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-6">
         <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-6xl h-[90vh] flex flex-col shadow-2xl overflow-hidden">
             
-            <!-- Modal Header -->
+            <!-- Auditor Modal Header -->
             <div class="bg-slate-950 px-6 py-3.5 border-b border-slate-800 flex items-center justify-between flex-shrink-0">
                 <div class="flex items-center gap-3">
                     <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-amber-500 to-orange-600 text-slate-950 flex items-center justify-center font-black text-base shadow-lg shadow-amber-500/20">
@@ -227,7 +119,7 @@
                     </div>
                     <div>
                         <h3 class="text-sm font-bold text-white flex items-center gap-2">
-                            Draft Contract Risk Auditor & State Legal Suite
+                            Draft Contract AI Risk Auditor & State Legal Suite
                             <span class="px-2 py-0.5 text-[9px] bg-brand-500/20 text-brand-300 border border-brand-500/30 rounded font-bold uppercase">India Legal Framework</span>
                         </h3>
                         <p class="text-[11px] text-slate-400">Audits Stamp Duty, Registration Act 1908, Lock-in, Termination, and Commercial Risk</p>
@@ -243,151 +135,99 @@
                 </div>
             </div>
 
-            <!-- Modal Body Split-Screen -->
+            <!-- Auditor Modal Body: Split Screen -->
             <div class="flex-1 grid grid-cols-1 lg:grid-cols-12 overflow-hidden">
                 
-                <!-- Left Column: Inputs Form (5 Cols) -->
+                <!-- Left Column: Input Form (5 Cols) -->
                 <div class="lg:col-span-5 border-b lg:border-b-0 lg:border-r border-slate-800 p-4 space-y-4 overflow-y-auto custom-scrollbar bg-slate-950/50">
                     
-                    <div class="flex border-b border-slate-800 pb-2 text-xs font-bold gap-2">
-                        <button onclick="switchAuditorSubTab('audit')" id="subtab-btn-audit" class="px-3 py-1.5 rounded-lg bg-brand-600 text-white flex items-center gap-1.5">
-                            <i class="fa-solid fa-shield-halved"></i> Contract Risk Audit
-                        </button>
-                        <button onclick="switchAuditorSubTab('stamp')" id="subtab-btn-stamp" class="px-3 py-1.5 rounded-lg text-slate-400 hover:text-white flex items-center gap-1.5">
-                            <i class="fa-solid fa-calculator text-amber-400"></i> Stamp Duty Calculator
-                        </button>
-                    </div>
-
-                    <!-- Contract Audit Inputs View -->
-                    <div id="viewContractAudit" class="space-y-3 text-xs">
-                        <div>
-                            <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider mb-2">1. Select Document Category</label>
-                            <div class="grid grid-cols-2 gap-1.5 p-1 bg-slate-950 rounded-xl border border-slate-800 font-semibold">
-                                <button onclick="selectDocTypeTab('RentAgreement')" id="doctype-tab-RentAgreement" class="doctype-tab py-1.5 px-2 rounded-lg text-left flex items-center gap-1.5 bg-brand-600 text-white shadow-sm">
-                                    <i class="fa-solid fa-file-contract text-xs"></i> Rent Agreement
-                                </button>
-                                <button onclick="selectDocTypeTab('LeaseDeed')" id="doctype-tab-LeaseDeed" class="doctype-tab py-1.5 px-2 rounded-lg text-left flex items-center gap-1.5 text-slate-400 hover:text-white">
-                                    <i class="fa-solid fa-building text-xs"></i> Commercial Lease
-                                </button>
-                                <button onclick="selectDocTypeTab('TerminationLetter')" id="doctype-tab-TerminationLetter" class="doctype-tab py-1.5 px-2 rounded-lg text-left flex items-center gap-1.5 text-slate-400 hover:text-white">
-                                    <i class="fa-solid fa-file-circle-xmark text-xs"></i> Termination Letter
-                                </button>
-                                <button onclick="selectDocTypeTab('OtherDeeds')" id="doctype-tab-OtherDeeds" class="doctype-tab py-1.5 px-2 rounded-lg text-left flex items-center gap-1.5 text-slate-400 hover:text-white">
-                                    <i class="fa-solid fa-file-lines text-xs"></i> Other (NOC / BBA)
-                                </button>
-                            </div>
-                        </div>
-
-                        <div>
-                            <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider mb-2">2. Upload Draft Document (PDF / DOCX)</label>
-                            <div id="dropZone" onclick="document.getElementById('draftFileInput').click()" class="border-2 border-dashed border-slate-700 hover:border-brand-500/80 bg-slate-900/60 p-4 rounded-xl text-center cursor-pointer transition space-y-1">
-                                <i class="fa-solid fa-cloud-arrow-up text-2xl text-brand-400"></i>
-                                <p id="uploadedFileName" class="text-xs font-semibold text-slate-200">Click to upload or drag draft agreement here</p>
-                                <p class="text-[10px] text-slate-500">Supports PDF, DOCX up to 25MB</p>
-                                <input type="file" id="draftFileInput" onchange="handleDraftFileUpload(event)" class="hidden" accept=".pdf,.docx,.doc">
-                            </div>
-                        </div>
-
-                        <div class="space-y-3 pt-2 border-t border-slate-800/80">
-                            <div class="flex items-center justify-between">
-                                <label class="font-bold text-slate-200 text-[11px] uppercase tracking-wider">3. Key Terms Questionnaire</label>
-                                <button type="button" onclick="autoFillAiQuestionnaire()" class="text-[10px] text-amber-400 hover:underline font-bold flex items-center gap-1">
-                                    <i class="fa-solid fa-wand-magic-sparkles"></i> Auto-Extract Draft Key Terms
-                                </button>
-                            </div>
-
-                            <div class="grid grid-cols-2 gap-2">
-                                <div>
-                                    <label class="block text-[10px] text-slate-400 mb-1">State Jurisdiction</label>
-                                    <select id="questState" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-slate-200 focus:ring-1 focus:ring-brand-500">
-                                        <option value="MH">Maharashtra</option>
-                                        <option value="DL">Delhi NCR</option>
-                                        <option value="UP">Uttar Pradesh</option>
-                                        <option value="KA">Karnataka</option>
-                                        <option value="RJ" selected>Rajasthan</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label class="block text-[10px] text-slate-400 mb-1">Total Tenure (Months)</label>
-                                    <input type="number" id="questTenure" value="11" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-slate-200 focus:ring-1 focus:ring-brand-500">
-                                </div>
-                            </div>
-
-                            <div class="grid grid-cols-2 gap-2">
-                                <div>
-                                    <label class="block text-[10px] text-slate-400 mb-1">Lock-in Period (Months)</label>
-                                    <input type="number" id="questLockin" value="6" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-slate-200 focus:ring-1 focus:ring-brand-500">
-                                </div>
-                                <div>
-                                    <label class="block text-[10px] text-slate-400 mb-1">Notice Period (Days)</label>
-                                    <input type="number" id="questNotice" value="15" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-slate-200 focus:ring-1 focus:ring-brand-500">
-                                </div>
-                            </div>
-
-                            <div>
-                                <label class="block text-[10px] text-slate-400 mb-1">Special Clauses & Obligations</label>
-                                <textarea id="questObligations" rows="2" placeholder="e.g. Society maintenance and electricity charges..." class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-slate-200 focus:ring-1 focus:ring-brand-500"></textarea>
-                            </div>
-
-                            <button onclick="runRiskAnalysisEngine()" class="w-full py-2 bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 text-white rounded-lg font-bold shadow-lg transition flex items-center justify-center gap-2">
-                                <i class="fa-solid fa-shield-halved"></i> Audit Legal & Business Risks
+                    <!-- Document Selection Tabs -->
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider mb-2">1. Select Document Category</label>
+                        <div class="grid grid-cols-2 gap-1.5 p-1 bg-slate-950 rounded-xl border border-slate-800 text-xs font-semibold">
+                            <button onclick="selectDocTypeTab('RentAgreement')" id="doctype-tab-RentAgreement" class="doctype-tab py-1.5 px-2 rounded-lg text-left flex items-center gap-1.5 bg-brand-600 text-white shadow-sm">
+                                <i class="fa-solid fa-file-contract text-xs"></i> Rent Agreement
+                            </button>
+                            <button onclick="selectDocTypeTab('LeaseDeed')" id="doctype-tab-LeaseDeed" class="doctype-tab py-1.5 px-2 rounded-lg text-left flex items-center gap-1.5 text-slate-400 hover:text-white">
+                                <i class="fa-solid fa-building text-xs"></i> Commercial Lease
+                            </button>
+                            <button onclick="selectDocTypeTab('TerminationLetter')" id="doctype-tab-TerminationLetter" class="doctype-tab py-1.5 px-2 rounded-lg text-left flex items-center gap-1.5 text-slate-400 hover:text-white">
+                                <i class="fa-solid fa-file-circle-xmark text-xs"></i> Termination Letter
+                            </button>
+                            <button onclick="selectDocTypeTab('OtherDeeds')" id="doctype-tab-OtherDeeds" class="doctype-tab py-1.5 px-2 rounded-lg text-left flex items-center gap-1.5 text-slate-400 hover:text-white">
+                                <i class="fa-solid fa-file-lines text-xs"></i> Other (NOC / BBA)
                             </button>
                         </div>
                     </div>
 
-                    <!-- Stamp Duty Engine View -->
-                    <div id="viewStampCalculator" class="hidden space-y-3 text-xs">
-                        <div>
-                            <label class="block text-[10px] text-slate-400 mb-1">Select State Jurisdiction</label>
-                            <select id="stampState" onchange="calculateStampDuty()" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-slate-200 font-semibold">
-                                <option value="RJ" selected>Rajasthan (5% Stamp Duty)</option>
-                                <option value="MH">Maharashtra (5% Stamp + Reg Fee)</option>
-                                <option value="DL">Delhi NCR (2% - 3% Stamp Duty)</option>
-                                <option value="UP">Uttar Pradesh (4% Stamp Duty)</option>
-                                <option value="KA">Karnataka (1% - 5% Stamp Duty)</option>
-                            </select>
-                        </div>
-                        <div class="grid grid-cols-2 gap-2">
-                            <div>
-                                <label class="block text-[10px] text-slate-400 mb-1">Monthly Rent (₹)</label>
-                                <input type="number" id="stampMonthlyRent" oninput="calculateStampDuty()" value="45000" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-slate-200">
-                            </div>
-                            <div>
-                                <label class="block text-[10px] text-slate-400 mb-1">Refundable Deposit (₹)</label>
-                                <input type="number" id="stampDeposit" oninput="calculateStampDuty()" value="135000" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-slate-200">
-                            </div>
-                        </div>
-                        <div class="p-4 bg-slate-950 border border-slate-800 rounded-xl space-y-2 mt-2">
-                            <h4 class="font-bold text-slate-200 text-xs flex justify-between">
-                                <span>Estimated Payable Breakdown</span>
-                                <span id="stampStateTag" class="text-brand-400">Rajasthan Jurisdiction</span>
-                            </h4>
-                            <div class="space-y-1.5 text-[11px] pt-1">
-                                <div class="flex justify-between text-slate-400">
-                                    <span>Total Contract Value:</span>
-                                    <b id="resTotalRentVal" class="text-slate-200">₹0</b>
-                                </div>
-                                <div class="flex justify-between text-slate-400">
-                                    <span>Stamp Duty Rate:</span>
-                                    <b id="resStampRate" class="text-amber-400">5.0%</b>
-                                </div>
-                                <div class="flex justify-between text-slate-200 font-bold border-t border-slate-800 pt-2 text-xs">
-                                    <span>Total Government Fee:</span>
-                                    <b id="resTotalPayable" class="text-emerald-400">₹0</b>
-                                </div>
-                            </div>
+                    <!-- Upload File Drag Drop Box -->
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider mb-2">2. Upload Draft Document (PDF / DOCX)</label>
+                        <div id="dropZone" onclick="document.getElementById('draftFileInput').click()" class="border-2 border-dashed border-slate-700 hover:border-brand-500/80 bg-slate-900/60 p-4 rounded-xl text-center cursor-pointer transition space-y-1">
+                            <i class="fa-solid fa-cloud-arrow-up text-2xl text-brand-400"></i>
+                            <p id="uploadedFileName" class="text-xs font-semibold text-slate-200">Click to upload or drag draft agreement here</p>
+                            <p class="text-[10px] text-slate-500">Supports PDF, DOCX up to 25MB</p>
+                            <input type="file" id="draftFileInput" onchange="handleDraftFileUpload(event)" class="hidden" accept=".pdf,.docx,.doc">
                         </div>
                     </div>
 
+                    <!-- Questionnaire Form -->
+                    <div class="space-y-3 pt-2 border-t border-slate-800/80 text-xs">
+                        <div class="flex items-center justify-between">
+                            <label class="font-bold text-slate-200 text-[11px] uppercase tracking-wider">3. Key Terms Questionnaire</label>
+                            <button type="button" onclick="autoFillAiQuestionnaire()" class="text-[10px] text-amber-400 hover:underline font-bold flex items-center gap-1">
+                                <i class="fa-solid fa-wand-magic-sparkles"></i> Auto-Extract Draft Key Terms
+                            </button>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="block text-[10px] text-slate-400 mb-1">State Jurisdiction</label>
+                                <select id="questState" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-slate-200 focus:ring-1 focus:ring-brand-500">
+                                    <option value="MH">Maharashtra</option>
+                                    <option value="DL">Delhi NCR</option>
+                                    <option value="UP">Uttar Pradesh</option>
+                                    <option value="KA">Karnataka</option>
+                                    <option value="RJ" selected>Rajasthan</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-[10px] text-slate-400 mb-1">Total Tenure (Months)</label>
+                                <input type="number" id="questTenure" value="11" placeholder="e.g. 11" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-slate-200 focus:ring-1 focus:ring-brand-500">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="block text-[10px] text-slate-400 mb-1">Lock-in Period (Months)</label>
+                                <input type="number" id="questLockin" value="6" placeholder="e.g. 6" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-slate-200 focus:ring-1 focus:ring-brand-500">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] text-slate-400 mb-1">Notice Period (Days)</label>
+                                <input type="number" id="questNotice" value="15" placeholder="e.g. 15" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-slate-200 focus:ring-1 focus:ring-brand-500">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-[10px] text-slate-400 mb-1">Special Clauses & Maintenance</label>
+                            <textarea id="questObligations" rows="2" placeholder="e.g. Maintenance charges to be paid directly to society..." class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-slate-200 focus:ring-1 focus:ring-brand-500"></textarea>
+                        </div>
+
+                        <button onclick="runRiskAnalysisEngine()" class="w-full py-2 bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 text-white rounded-lg font-bold shadow-lg transition flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-shield-halved"></i> Audit Legal & Business Risks
+                        </button>
+                    </div>
                 </div>
 
-                <!-- Right Column: Scrollable Audit Results View (7 Cols) -->
+                <!-- Right Column: Scrollable Audit Results & Bot Thread (7 Cols) -->
                 <div class="lg:col-span-7 flex flex-col h-full bg-slate-900 overflow-hidden">
+                    
+                    <!-- Header Bar -->
                     <div class="p-3 bg-slate-950/80 border-b border-slate-800 flex items-center justify-between text-xs flex-shrink-0">
                         <span class="font-bold text-slate-300 flex items-center gap-2">
                             <i class="fa-solid fa-list-check text-brand-400"></i> Audit Findings & LLM Legal Q&A
                         </span>
-                        <div class="flex items-center gap-2">
+                        <div id="riskScoreBadge" class="flex items-center gap-2">
                             <span class="text-[10px] text-slate-400">Active Engine:</span>
                             <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-brand-500/20 text-brand-300 border border-brand-500/30">Local Rule Audit</span>
                         </div>
@@ -395,6 +235,8 @@
 
                     <!-- Scrollable Content Feed Container -->
                     <div id="aiChatThread" class="flex-1 p-4 overflow-y-auto custom-scrollbar space-y-4 max-h-[calc(90vh-120px)]">
+                        
+                        <!-- Welcome Message -->
                         <div class="flex gap-3 text-xs">
                             <div class="w-7 h-7 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold flex-shrink-0 border border-amber-500/30">
                                 <i class="fa-solid fa-robot"></i>
@@ -404,9 +246,193 @@
                                 <p>Select your draft document type, upload the file, or click <b>"Auto-Extract Draft Key Terms"</b> to begin auditing legal & business risks under Indian laws.</p>
                             </div>
                         </div>
+
                     </div>
 
-                    <!-- Chat Input Bar -->
+                    <!-- Fixed Chat Input Bar at Bottom -->
                     <div class="p-3 bg-slate-950 border-t border-slate-800 flex gap-2 flex-shrink-0">
                         <input type="text" id="aiChatInput" onkeydown="if(event.key==='Enter') sendUserChatMessage()" placeholder="Ask follow-up legal questions or request clause modifications..." class="flex-1 bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-brand-500">
-                        <button onclick="sendUserChatMessage()" class="px-4 py-2 bg-brand-600 hover:bg-brand-500 text-white rounded-lg text-xs font
+                        <button onclick="sendUserChatMessage()" class="px-4 py-2 bg-brand-600 hover:bg-brand-500 text-white rounded-lg text-xs font-bold transition flex items-center gap-1.5">
+                            <i class="fa-solid fa-paper-plane"></i> Ask AI
+                        </button>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Script Logic -->
+    <script>
+        let currentDocType = 'RentAgreement';
+
+        function openAiAuditorModal() {
+            document.getElementById('aiAuditorModal').classList.remove('hidden');
+        }
+
+        function closeAiAuditorModal() {
+            document.getElementById('aiAuditorModal').classList.add('hidden');
+        }
+
+        function selectDocTypeTab(docType) {
+            currentDocType = docType;
+            document.querySelectorAll('.doctype-tab').forEach(btn => {
+                btn.className = "doctype-tab py-1.5 px-2 rounded-lg text-left flex items-center gap-1.5 text-slate-400 hover:text-white";
+            });
+            const active = document.getElementById(`doctype-tab-${docType}`);
+            if (active) {
+                active.className = "doctype-tab py-1.5 px-2 rounded-lg text-left flex items-center gap-1.5 bg-brand-600 text-white shadow-sm";
+            }
+        }
+
+        function handleDraftFileUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                document.getElementById('uploadedFileName').innerText = `Uploaded: ${file.name}`;
+                showToast("Draft uploaded successfully!");
+            }
+        }
+
+        function autoFillAiQuestionnaire() {
+            document.getElementById('questTenure').value = 11;
+            document.getElementById('questLockin').value = 6;
+            document.getElementById('questNotice').value = 15;
+            document.getElementById('questObligations').value = "Tenant responsible for society maintenance and electricity charges.";
+            showToast("Draft terms extracted automatically!");
+        }
+
+        function runRiskAnalysisEngine() {
+            const tenure = parseInt(document.getElementById('questTenure').value) || 0;
+            const lockin = parseInt(document.getElementById('questLockin').value) || 0;
+            const notice = parseInt(document.getElementById('questNotice').value) || 0;
+            const state = document.getElementById('questState').value;
+
+            const chatThread = document.getElementById('aiChatThread');
+            let risks = [];
+
+            // 1. Notice Period Analysis
+            if (notice < 30) {
+                risks.push({
+                    level: 'MEDIUM',
+                    title: 'Short Termination Notice Period',
+                    desc: `Notice period is set to ${notice} days. Under standard commercial practices in ${state}, a minimum 30 to 60 days notice is recommended to allow adequate handover and security deposit reconciliation.`
+                });
+            }
+
+            // 2. Lock-in Ratio Analysis
+            if (lockin >= tenure * 0.5) {
+                risks.push({
+                    level: 'HIGH',
+                    title: 'Excessive Lock-In Ratio Penalty Risk',
+                    desc: `Lock-in duration (${lockin} months) covers ${Math.round((lockin/tenure)*100)}% of the total lease term (${tenure} months). Courts in India under Section 74 of the Indian Contract Act generally disallow full-term penalty claims unless actual financial loss is established by the landlord.`
+                });
+            }
+
+            // 3. Stamp Duty / Registration Check
+            if (tenure > 11) {
+                risks.push({
+                    level: 'HIGH',
+                    title: 'Mandatory Lease Registration Required (Section 17, Registration Act 1908)',
+                    desc: `Tenure exceeds 11 months. Unregistered agreements over 11 months cannot be admitted as valid evidence in Indian courts under Section 49.`
+                });
+            } else {
+                risks.push({
+                    level: 'LOW',
+                    title: '11-Month Standard Exemption Compliant',
+                    desc: `Lease tenure is ${tenure} months. Exempt from mandatory registration under Section 17, though required state stamp duty must still be paid.`
+                });
+            }
+
+            // Render Output Cards
+            let riskCardsHtml = risks.map(r => `
+                <div class="p-3.5 rounded-xl border ${r.level === 'HIGH' ? 'bg-red-500/10 border-red-500/30 text-red-200' : r.level === 'MEDIUM' ? 'bg-amber-500/10 border-amber-500/30 text-amber-200' : 'bg-emerald-500/10 border-emerald-500/30 text-emerald-200'} space-y-1">
+                    <div class="flex items-center justify-between font-bold text-xs">
+                        <span><i class="fa-solid fa-triangle-exclamation mr-1.5"></i> ${r.title}</span>
+                        <span class="text-[9px] px-2 py-0.5 rounded font-extrabold ${r.level === 'HIGH' ? 'bg-red-500/20 text-red-300 border border-red-500/30' : r.level === 'MEDIUM' ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30' : 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'}">${r.level} RISK</span>
+                    </div>
+                    <p class="text-[11px] text-slate-300 leading-relaxed">${r.desc}</p>
+                </div>
+            `).join('');
+
+            const responseMsg = document.createElement('div');
+            responseMsg.className = "flex gap-3 text-xs";
+            responseMsg.innerHTML = `
+                <div class="w-7 h-7 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold flex-shrink-0 border border-amber-500/30">
+                    <i class="fa-solid fa-robot"></i>
+                </div>
+                <div class="bg-slate-950 border border-slate-800 rounded-2xl p-4 text-slate-300 space-y-3 max-w-2xl w-full">
+                    <p class="font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-clipboard-check text-emerald-400"></i> Local Rule Audit Complete for ${currentDocType} (${state})
+                    </p>
+                    ${riskCardsHtml}
+                </div>
+            `;
+
+            chatThread.appendChild(responseMsg);
+            
+            // Auto-scroll to the bottom so the newly added results are visible immediately
+            setTimeout(() => {
+                chatThread.scrollTop = chatThread.scrollHeight;
+            }, 100);
+        }
+
+        function sendUserChatMessage() {
+            const input = document.getElementById('aiChatInput');
+            const val = input.value.trim();
+            if (!val) return;
+
+            const chatThread = document.getElementById('aiChatThread');
+
+            const userMsg = document.createElement('div');
+            userMsg.className = "flex gap-3 text-xs justify-end";
+            userMsg.innerHTML = `
+                <div class="bg-brand-600 text-white rounded-2xl p-3 max-w-xl">
+                    ${val}
+                </div>
+            `;
+            chatThread.appendChild(userMsg);
+            input.value = '';
+
+            setTimeout(() => {
+                const botMsg = document.createElement('div');
+                botMsg.className = "flex gap-3 text-xs";
+                botMsg.innerHTML = `
+                    <div class="w-7 h-7 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold flex-shrink-0 border border-amber-500/30">
+                        <i class="fa-solid fa-robot"></i>
+                    </div>
+                    <div class="bg-slate-950 border border-slate-800 rounded-2xl p-3.5 text-slate-300 space-y-2 max-w-2xl">
+                        <p class="font-semibold text-white">Legal Recommendation:</p>
+                        <p class="text-[11px] text-slate-300">Under Indian contract law practices, we recommend inserting a standard <b>Force Majeure & Commercial Unfeasibility clause</b> to mitigate lock-in penalties during regulatory shifts or municipal closure orders.</p>
+                    </div>
+                `;
+                chatThread.appendChild(botMsg);
+                chatThread.scrollTop = chatThread.scrollHeight;
+            }, 600);
+        }
+
+        function exportAuditPdf() {
+            const element = document.getElementById('aiChatThread');
+            const opt = {
+                margin:       0.5,
+                filename:     `TractorJunction_Legal_Risk_Report.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2 },
+                jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+            };
+
+            showToast("Exporting findings to PDF...");
+            html2pdf().set(opt).from(element).save();
+        }
+
+        function showToast(msg) {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = "bg-slate-900 border border-brand-500/40 text-white px-4 py-2.5 rounded-xl shadow-2xl text-xs font-semibold flex items-center gap-2 animate-slide-in pointer-events-auto";
+            toast.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-400"></i> ${msg}`;
+            container.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+    </script>
+</body>
+</html>
