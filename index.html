@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Real Estate & DSA Management Portal</title>
+    <title>Real Estate & DSA Management Portal - Tractor Junction</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Icons -->
@@ -55,7 +55,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16 gap-4">
                 
-                <!-- Brand & Logo (Updated to Tractor Junction) -->
+                <!-- Brand & Logo -->
                 <div class="flex items-center gap-3">
                     <div class="h-10 w-10 rounded-xl bg-gradient-to-tr from-brand-600 to-indigo-400 flex items-center justify-center text-white shadow-lg shadow-brand-500/20 font-black text-xl">
                         TJ
@@ -122,7 +122,7 @@
     <!-- Main Content Area -->
     <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
         
-        <!-- Legal Risk Engine Banner (Updated Header, Subtitle Removed, Single Button) -->
+        <!-- Legal Risk Engine Banner -->
         <div class="bg-gradient-to-r from-slate-900 via-brand-950/40 to-slate-900 rounded-xl border border-brand-500/20 p-4 flex flex-col md:flex-row items-center justify-between gap-4 shadow-xl">
             <div class="flex items-center gap-3">
                 <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/30 flex items-center justify-center font-bold text-lg">
@@ -142,7 +142,7 @@
             </div>
         </div>
 
-        <!-- Metric Cards Row (Total Centres, Active Centres, Closed Centres) -->
+        <!-- Metric Cards Row -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             <div class="bg-slate-900/90 rounded-xl border border-slate-800 p-4 shadow-md flex items-center justify-between">
                 <div>
@@ -175,7 +175,23 @@
             </div>
         </div>
 
-        <!-- Real Estate Data Table Container (Connected with Google Sheets) -->
+        <!-- Controls Toolbar -->
+        <div class="bg-slate-900/80 rounded-xl border border-slate-800 p-4 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="relative w-full md:w-80">
+                <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-slate-500 text-xs"></i>
+                <input type="text" id="searchInput" oninput="renderTable()" placeholder="Search state, partner, facility..." class="w-full bg-slate-950 border border-slate-800 rounded-lg pl-9 pr-4 py-2 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition">
+            </div>
+            <div class="flex items-center gap-3 w-full md:w-auto justify-end flex-wrap">
+                <button onclick="fetchLatestSheetData()" class="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 rounded-lg text-xs font-semibold transition flex items-center gap-2">
+                    <i class="fa-solid fa-rotate text-brand-400"></i> Sync Sheets
+                </button>
+                <button onclick="openAddContractModal()" class="px-4 py-2 bg-brand-600 hover:bg-brand-500 text-white rounded-lg text-xs font-bold transition shadow-md shadow-brand-600/20 flex items-center gap-2">
+                    <i class="fa-solid fa-plus"></i> <span>Add Record</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Real Estate Data Table Container -->
         <div class="bg-slate-900 rounded-xl border border-slate-800 shadow-xl overflow-hidden">
             <div class="overflow-x-auto custom-scrollbar">
                 <table class="w-full text-left text-xs text-slate-300 border-collapse">
@@ -191,7 +207,7 @@
                         </tr>
                     </thead>
                     <tbody id="tableBody" class="divide-y divide-slate-800/60 font-medium">
-                        <!-- Content dynamically loaded from Google Sheets / In-Memory State -->
+                        <!-- Dynamic Content Loaded Here -->
                     </tbody>
                 </table>
             </div>
@@ -199,7 +215,7 @@
 
     </main>
 
-    <!-- AI Legal Auditor Chatbot, PDF Exporter & Stamp Duty Modal -->
+    <!-- AI Legal Auditor Chatbot Modal -->
     <div id="aiAuditorModal" class="fixed inset-0 z-50 hidden bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-6">
         <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-6xl h-[90vh] flex flex-col shadow-2xl overflow-hidden">
             
@@ -276,3 +292,121 @@
                             <div class="flex items-center justify-between">
                                 <label class="font-bold text-slate-200 text-[11px] uppercase tracking-wider">3. Key Terms Questionnaire</label>
                                 <button type="button" onclick="autoFillAiQuestionnaire()" class="text-[10px] text-amber-400 hover:underline font-bold flex items-center gap-1">
+                                    <i class="fa-solid fa-wand-magic-sparkles"></i> Auto-Extract Draft Key Terms
+                                </button>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-2">
+                                <div>
+                                    <label class="block text-[10px] text-slate-400 mb-1">State Jurisdiction</label>
+                                    <select id="questState" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-slate-200 focus:ring-1 focus:ring-brand-500">
+                                        <option value="MH">Maharashtra</option>
+                                        <option value="DL">Delhi NCR</option>
+                                        <option value="UP">Uttar Pradesh</option>
+                                        <option value="KA">Karnataka</option>
+                                        <option value="RJ" selected>Rajasthan</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] text-slate-400 mb-1">Total Tenure (Months)</label>
+                                    <input type="number" id="questTenure" value="11" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-slate-200 focus:ring-1 focus:ring-brand-500">
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-2">
+                                <div>
+                                    <label class="block text-[10px] text-slate-400 mb-1">Lock-in Period (Months)</label>
+                                    <input type="number" id="questLockin" value="6" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-slate-200 focus:ring-1 focus:ring-brand-500">
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] text-slate-400 mb-1">Notice Period (Days)</label>
+                                    <input type="number" id="questNotice" value="15" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-slate-200 focus:ring-1 focus:ring-brand-500">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-[10px] text-slate-400 mb-1">Special Clauses & Obligations</label>
+                                <textarea id="questObligations" rows="2" placeholder="e.g. Society maintenance and electricity charges..." class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-slate-200 focus:ring-1 focus:ring-brand-500"></textarea>
+                            </div>
+
+                            <button onclick="runRiskAnalysisEngine()" class="w-full py-2 bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 text-white rounded-lg font-bold shadow-lg transition flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-shield-halved"></i> Audit Legal & Business Risks
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Stamp Duty Engine View -->
+                    <div id="viewStampCalculator" class="hidden space-y-3 text-xs">
+                        <div>
+                            <label class="block text-[10px] text-slate-400 mb-1">Select State Jurisdiction</label>
+                            <select id="stampState" onchange="calculateStampDuty()" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-slate-200 font-semibold">
+                                <option value="RJ" selected>Rajasthan (5% Stamp Duty)</option>
+                                <option value="MH">Maharashtra (5% Stamp + Reg Fee)</option>
+                                <option value="DL">Delhi NCR (2% - 3% Stamp Duty)</option>
+                                <option value="UP">Uttar Pradesh (4% Stamp Duty)</option>
+                                <option value="KA">Karnataka (1% - 5% Stamp Duty)</option>
+                            </select>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="block text-[10px] text-slate-400 mb-1">Monthly Rent (₹)</label>
+                                <input type="number" id="stampMonthlyRent" oninput="calculateStampDuty()" value="45000" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-slate-200">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] text-slate-400 mb-1">Refundable Deposit (₹)</label>
+                                <input type="number" id="stampDeposit" oninput="calculateStampDuty()" value="135000" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-slate-200">
+                            </div>
+                        </div>
+                        <div class="p-4 bg-slate-950 border border-slate-800 rounded-xl space-y-2 mt-2">
+                            <h4 class="font-bold text-slate-200 text-xs flex justify-between">
+                                <span>Estimated Payable Breakdown</span>
+                                <span id="stampStateTag" class="text-brand-400">Rajasthan Jurisdiction</span>
+                            </h4>
+                            <div class="space-y-1.5 text-[11px] pt-1">
+                                <div class="flex justify-between text-slate-400">
+                                    <span>Total Contract Value:</span>
+                                    <b id="resTotalRentVal" class="text-slate-200">₹0</b>
+                                </div>
+                                <div class="flex justify-between text-slate-400">
+                                    <span>Stamp Duty Rate:</span>
+                                    <b id="resStampRate" class="text-amber-400">5.0%</b>
+                                </div>
+                                <div class="flex justify-between text-slate-200 font-bold border-t border-slate-800 pt-2 text-xs">
+                                    <span>Total Government Fee:</span>
+                                    <b id="resTotalPayable" class="text-emerald-400">₹0</b>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Right Column: Scrollable Audit Results View (7 Cols) -->
+                <div class="lg:col-span-7 flex flex-col h-full bg-slate-900 overflow-hidden">
+                    <div class="p-3 bg-slate-950/80 border-b border-slate-800 flex items-center justify-between text-xs flex-shrink-0">
+                        <span class="font-bold text-slate-300 flex items-center gap-2">
+                            <i class="fa-solid fa-list-check text-brand-400"></i> Audit Findings & LLM Legal Q&A
+                        </span>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] text-slate-400">Active Engine:</span>
+                            <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-brand-500/20 text-brand-300 border border-brand-500/30">Local Rule Audit</span>
+                        </div>
+                    </div>
+
+                    <!-- Scrollable Content Feed Container -->
+                    <div id="aiChatThread" class="flex-1 p-4 overflow-y-auto custom-scrollbar space-y-4 max-h-[calc(90vh-120px)]">
+                        <div class="flex gap-3 text-xs">
+                            <div class="w-7 h-7 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold flex-shrink-0 border border-amber-500/30">
+                                <i class="fa-solid fa-robot"></i>
+                            </div>
+                            <div class="bg-slate-950 border border-slate-800 rounded-2xl p-3.5 text-slate-300 space-y-2 max-w-2xl">
+                                <p class="font-semibold text-white">Hello Bushra! I am your Indian Real Estate & DSA Legal Compliance Bot.</p>
+                                <p>Select your draft document type, upload the file, or click <b>"Auto-Extract Draft Key Terms"</b> to begin auditing legal & business risks under Indian laws.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Chat Input Bar -->
+                    <div class="p-3 bg-slate-950 border-t border-slate-800 flex gap-2 flex-shrink-0">
+                        <input type="text" id="aiChatInput" onkeydown="if(event.key==='Enter') sendUserChatMessage()" placeholder="Ask follow-up legal questions or request clause modifications..." class="flex-1 bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-brand-500">
+                        <button onclick="sendUserChatMessage()" class="px-4 py-2 bg-brand-600 hover:bg-brand-500 text-white rounded-lg text-xs font
